@@ -7,18 +7,25 @@ $router->get('PHP-Auth/home', function () {
 });
 
 // REGISTER
-$router->get('PHP-Auth/auth/register', 'AuthsController@showRegisterForm');
+$router->get('PHP-Auth/auth/register', function () {
+    return view("auth/login");
+});
 $router->post('PHP-Auth/auth/register', 'AuthsController@register');
 
 // LOGIN
-$router->get('PHP-Auth/auth/login', 'AuthsController@showLoginForm');
+$router->get('PHP-Auth/auth/login', function () {
+    return view("auth/register");
+});
+
 $router->post('PHP-Auth/auth/login', 'AuthsController@login');
 
 // LOGOUT
 $router->post('PHP-Auth/auth/logout', 'AuthsController@logout');
 
 // EMAIL
-$router->get('PHP-Auth/auth/email/verify', 'AuthsController@showSendVerifymForm');
+$router->get('PHP-Auth/auth/email/verify', function () {
+    return view('auth/verify');
+});
 $router->post('PHP-Auth/auth/email/verify', 'AuthsController@sendVerifyLink');
 
 // FORGOT
