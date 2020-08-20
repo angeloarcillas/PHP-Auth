@@ -23,10 +23,11 @@ $router->post('PHP-Auth/auth/login', 'AuthsController@login');
 $router->post('PHP-Auth/auth/logout', 'AuthsController@logout');
 
 // EMAIL
-$router->get('PHP-Auth/auth/email/verify', function () {
+$router->get('PHP-Auth/auth/email/verify/link', function () {
     return view('auth/verify');
 });
-$router->post('PHP-Auth/auth/email/verify', 'AuthsController@sendVerifyLink');
+$router->post('PHP-Auth/auth/email/verify/link', 'AuthsController@sendVerifyLink');
+$router->get('PHP-Auth/auth/email/verify', 'AuthsController@verifyEmail');
 
 // FORGOT
 $router->get('PHP-Auth/auth/password/forgot', 'AuthsController@showForgotForm');
@@ -35,3 +36,6 @@ $router->post('PHP-Auth/auth/password/email', 'AuthsController@sendForgotLink');
 // RESET
 $router->get('PHP-Auth/auth/password/reset/{token}', 'AuthsController@showResetForm');
 $router->post('PHP-Auth/auth/password/reset', 'AuthsController@resetPassword');
+
+
+// server/email/?token=C#^$#^C#$^C@#&email=sample@mail.com

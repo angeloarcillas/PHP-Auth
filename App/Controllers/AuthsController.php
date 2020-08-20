@@ -68,6 +68,22 @@ class AuthsController
         return redirect("PHP-Auth");
     }
 
+    public function sendVerifyLink()
+    {
+        // Mail email verification link
+        dd("success");
+    }
+    public function verifyEmail()
+    {
+        $token = Request::query("token");
+        $email = Request::query("email");
+
+        // select email from email_user pivot table
+        // verify token
+        // update user
+        // redirect home
+    }
+    
     public function validate($params)
     {
         if (! isset($params['username'],$params['email'],

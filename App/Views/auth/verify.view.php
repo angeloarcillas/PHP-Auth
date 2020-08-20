@@ -8,9 +8,9 @@
           <div class="card-title">Please Verify Your Email Address</div>
         </div>
         <div class="card-body">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, doloremque odio nulla reiciendis eaque,
-          aperiam voluptatibus adipisci libero, natus dolorum nisi vitae unde assumenda. Adipisci dolorum corrupti
-          repudiandae eaque molestias.
+          <form action="PHP-Auth/auth/email/verify/link" method="POST">
+            <button type="submit" class="btn btn-primary">Resend Email Verification</button>
+          </form>
         </div>
       </div>
     </div>
