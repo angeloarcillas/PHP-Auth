@@ -27,7 +27,7 @@ class AuthsController
 
         
         if (! User::register($username, $email, $password)) {
-            error("somethings went wrong please try again");
+            error("Insert user failed");
         }
         
         // \Http\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
@@ -67,8 +67,8 @@ class AuthsController
 
     public function logout()
     {
-        if (! User::logout($_SESSION['auth']['id'])) {
-            error("Something went wrong, Please try again");
+        if (! User::setLoggedOut($_SESSION['auth']['id'])) {
+            error("Update logged_out failed");
         }
 
         session_start();

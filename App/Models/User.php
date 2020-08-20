@@ -28,7 +28,7 @@ class User
         return $db->query($sql, [$id]);
     }
     
-    public function logout($id)
+    public function setLoggedOut($id)
     {
         $db = new QueryBuilder(APP['database']);
         $id = "Acct-{$id}";
