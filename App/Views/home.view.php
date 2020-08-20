@@ -5,11 +5,12 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">PHP Authentication</div>
+          <div class="card-title">Welcome, Hi <?php echo e($user->username) ?></div>
         </div>
         <div class="card-body">
-          An act, process, or method of showing something (such as an identity, a piece of art, or a financial
-          transaction) to be real, true, or genuine : the act or process of authenticating something.
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, doloremque odio nulla reiciendis eaque,
+          aperiam voluptatibus adipisci libero, natus dolorum nisi vitae unde assumenda. Adipisci dolorum corrupti
+          repudiandae eaque molestias.
         </div>
       </div>
     </div>

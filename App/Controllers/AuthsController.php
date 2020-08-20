@@ -29,21 +29,53 @@ class AuthsController
         if (! User::register($username, $email, $password)) {
             error("somethings went wrong please try again");
         }
-
-        \Http\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
-
-        return redirect("/PHP-Auth/auth/login");
+        
+        // \Http\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
+        $_SESSION['auth']['name'] = $username;
+        return redirect("PHP-Auth/home");
     }
 
     public function login()
     {
         $request = request();
 
-        if (! User::login($request['username'], $request['password'])) {
+        // select username
+        // verify password
+        // update login
+        // set session
+        // success
+        if (! $user = User::find($request['username'])) {
+            $_SESSION['error'] = "Username or email doesnt exists";
+            return redirect("PHP-Auth/auth/login");
+        }
+        $hold = explode("-", $user->id);
+        $user->id = $hold[1];
+        
+        if (! password_verify($request['password'], $user->password)) {
+            $_SESSION['error'] = "Password is incorrect";
+            return redirect("PHP-Auth/auth/login");
+        }
+        if (! User::setLogggedIn($user->id)) {
+            error("Update logged_in failed");
+        }
+        
+        $_SESSION['auth']['id'] = $user->id;
+        $_SESSION['auth']['name'] = $user->username;
+        
+        return view("home", compact('user'));
+    }
+
+    public function logout()
+    {
+        if (! User::logout($_SESSION['auth']['id'])) {
             error("Something went wrong, Please try again");
         }
 
-        return view("home");
+        session_start();
+        session_unset();
+        session_destroy();
+
+        return redirect("PHP-Auth");
     }
 
     public function validate($params)
@@ -55,17 +87,17 @@ class AuthsController
     
         $username = $params['username'];
 
-        if (strlen($username) < 5 && strlen($username) > 55) {
+        if (strlen($username) < 5 || strlen($username) > 55) {
             error("invalid username length");
         }
         
-        if (! preg_match("/^[a-zA-Z ]*$/", $username)) {
+        if (! preg_match("/^[a-zA-Z0-9 ]*$/", $username)) {
             error("invalid username");
         }
 
         $email = $params['email'];
 
-        if (strlen($username) < 12 && strlen($username) > 55) {
+        if (strlen($email) < 12 || strlen($email) > 55) {
             error("invalid email length");
         }
 

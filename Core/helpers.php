@@ -22,6 +22,7 @@ if (! function_exists("view")) {
 if (! function_exists("redirect")) {
     function redirect($path)
     {
+        $path = trim($path, '/');
         header("Location: /{$path}");
     }
 }
@@ -58,7 +59,7 @@ if (! function_exists("request")) {
 if (! function_exists("assets")) {
     function assets($path)
     {
-        return '/App/assets/'.e($path);
+        return '/PHP-Auth/App/assets/'.e($path);
     }
 }
 

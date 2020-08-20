@@ -13,10 +13,10 @@
               <label class="col-md-4 col-form-label text-md-right">Username</label>
 
               <div class="col-md-6">
-                <input type="email" class="form-control" name="email" required autofocus>
+                <input type="text" class="form-control is-invalid" name="username" required autofocus>
 
                 <span class="invalid-feedback" role="alert">
-                  <strong>Invalid Feedback</strong>
+                  <strong><?php echo !isset($_SESSION['error'])?: $_SESSION['error'] ?></strong>
                 </span>
 
               </div>

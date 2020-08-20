@@ -9,6 +9,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="<?php echo assets("css/main.css") ?>">
 
   <title>PHP Authentication</title>
 </head>
@@ -27,8 +28,15 @@
       </nav>
 
       <div class="navbar-nav ml-auto">
+        <?php if (! isset($_SESSION['auth']['name'])): ?>
         <a href="/PHP-Auth/auth/login" class="nav-link">Login</a>
         <a href="/PHP-Auth/auth/register" class="nav-link">Register</a>
+        <?php else: ?>
+        <a href="#" class="nav-link"
+          onclick="event.preventDefault();document.querySelector('#logout-form').submit()">Logout</a>
+        <form id="logout-form" action="/PHP-Auth/auth/logout" method="post" style="display: none">
+        </form>
+        <?php endif; ?>
       </div>
     </div>
   </header>

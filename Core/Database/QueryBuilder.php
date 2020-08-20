@@ -3,7 +3,7 @@ namespace Core\Database;
 
 class QueryBuilder extends Connection
 {
-    private ?object $conn;
+    protected ?object $conn;
 
     /**
      * make database connection
@@ -26,42 +26,49 @@ class QueryBuilder extends Connection
     }
 
     /**
-     * query for fetch 1 from database
-     *
-     * @param string $sql
-     * @param array $params
-     */
-    public function querySelect(string $sql, array $params = []): ?array
-    {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetch();
-    }
-    
-    /**
      * query fetch all from database
      *
      * @param string $sql
      * @param array $params
      */
-    public function querySelectAll(string $sql, array $params = []): array
+    public function querySelectAll(string $sql, array $params = []): ?object
     {
         $stmt = $this->conn->prepare($sql);
+        $params = (array) $params;
         $stmt->execute($params);
+
         return $stmt->fetchAll();
     }
 
- 
+    /**
+     * query for fetch 1 from database
+     *
+     * @param string $sql
+     * @param array $params
+     */
+    public function querySelect(string $sql, array $params = []): ?object
+    {
+        $stmt = $this->conn->prepare($sql);
+        $params = (array) $params;
+        $stmt->execute($params);
+
+        // return null or data
+        if (! $data = $stmt->fetch()) {
+            return null;
+        }
+        return $data;
+    }
     
     /**
      * Select all from database
      *
      * @param string $table
      */
-    public function selectAll(string $table): array
+    public function selectAll($table)
     {
         $stmt = $this->conn->prepare("SELECT * FROM ?");
         $stmt->execute([$table]);
+
         return $stmt->fetchAll();
     }
 
@@ -71,32 +78,24 @@ class QueryBuilder extends Connection
      * @param string $table
      * @param array $params
      */
-    public function select($table, array $params = ['*']): array
+    public function select($table, array $params = ['*'])
     {
         $sql = sprintf(
             "SELECT %s FROM {$table}",
             implode(",", $params)
         );
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($params);
+        
         return $stmt->fetch();
     }
-
-    /**
-     * select columns from database then fetch all
-     *
-     * @param string $table
-     * @param array $params
-     */
-    public function selectFetchAll($table, array $params = ['*']): array
+    
+    public function count($table): int
     {
-        $sql = sprintf(
-            "SELECT %s FROM {$table}",
-            implode(",", $params)
-        );
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
+        $stmt = $this->conn->prepare("SELECT * FROM $table");
+        $stmt->execute();
+        return $stmt->rowCount();
     }
 
     public function __destruct()
