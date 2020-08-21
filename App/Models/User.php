@@ -68,6 +68,10 @@ class User
         return $db->query($sql, [$email]);
     }
 
+    // public function updatePassword($password)
+    // {
+    //     $sql = "UPDATE users SET `password` = ? WHERE id"
+    // }
     public static function generateID()
     {
         $db = new QueryBuilder(APP['database']);

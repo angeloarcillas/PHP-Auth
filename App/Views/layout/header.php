@@ -24,7 +24,7 @@
       <nav class="navbar-nav mr-auto">
         <a href="/PHP-Auth/truncate" class="nav-link">Truncate</a>
         <a href="#" class="nav-link">Users</a>
-        <a href="#" class="nav-link">Articles</a>
+        <a href="/PHP-Auth/auth/password/reset/<?php echo $_SESSION['token'] ?>" class="nav-link">Reset</a>
         <a href="/PHP-Auth/auth/email/verify/link" class="nav-link">Verify Email</a>
 
       </nav>

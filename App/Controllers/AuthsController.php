@@ -18,6 +18,7 @@ class AuthsController
             error("Insert user failed");
         }
         
+        $_SESSION['token'] = bin2hex(random_bytes(20));
         if (! User::setEmailToken($email, $_SESSION['token'])) {
             error("Set email and token to email_token table failed");
         }
@@ -27,7 +28,7 @@ class AuthsController
         $_SESSION['auth']['id'] = $user->id;
         $_SESSION['auth']['name'] = $user->username;
         $_SESSION['auth']['email'] = $user->email;
-        dd("stop");
+
         return view("home", compact('user'));
     }
 
@@ -102,6 +103,35 @@ class AuthsController
     public function sendForgotLink()
     {
         // Mail password reset link
+        dd("Success");
+    }
+    
+    public function resetPassword()
+    {
+        if (! hash_equals($_SESSION['token'], request('token'))) {
+            redirect('PHP-Auth?invalid+token');
+        }
+        
+        $password = request('password');
+        $confirmPassword = request('confirmPassword');
+        if (! isset($password, $confirmPassword)) {
+            error("password and confirm password is required");
+        }
+
+        if (strlen($password) < 8 || strlen($password) > 255) {
+            error("password too short");
+        }
+
+        if ($password !== $params['confirmPassword']) {
+            error("password and confirm password didnt match");
+        }
+        
+        // !TODO: check old and new password if not matched
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        if (! User::updatePassword($password, $email)) {
+            error("update password failed");
+        }
+        redirect("PHP-Auth");
     }
     public function validate($params)
     {

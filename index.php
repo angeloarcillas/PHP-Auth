@@ -1,7 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
-    // $_SESSION['token'] = bin2hex(random_bytes(20));
 }
 
 use Core\Request;
