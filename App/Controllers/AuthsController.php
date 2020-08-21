@@ -7,23 +7,28 @@ class AuthsController
 {
     public function register()
     {
-        $request = request();
-    
-        $this->validate($request);
+        $this->validate(request());
 
-        $username = $request['username'];
-        $email = $request['email'];
-        $password = password_hash($request['password'], PASSWORD_DEFAULT);
+        $username = request('username');
+        $email = request('email');
+        $password = password_hash(request('password'), PASSWORD_DEFAULT);
 
         
         if (! User::register($username, $email, $password)) {
             error("Insert user failed");
         }
         
+        if (! User::setEmailToken($email, $_SESSION['token'])) {
+            error("Set email and token to email_token table failed");
+        }
+        
         // \Core\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
-        $user = User::find($request['username']);
-        $_SESSION['auth']['name'] = $$user->username;
-        return redirect("PHP-Auth/home", ["key" => $mail]);
+        $user = User::find($username);
+        $_SESSION['auth']['id'] = $user->id;
+        $_SESSION['auth']['name'] = $user->username;
+        $_SESSION['auth']['email'] = $user->email;
+        dd("stop");
+        return view("home", compact('user'));
     }
 
     public function login()
@@ -74,15 +79,30 @@ class AuthsController
     }
     public function verifyEmail()
     {
-        $token = Request::query("token");
-        $email = Request::query("email");
+        // $token = Request::query("token");
+        // $email = Request::query("email");
 
-        // select email from email_user pivot table
+        if (! $user = User::findEmailToken(request("email"))) {
+            error("Email doesnt exists");
+        }
+        if (! hash_equals($user->token, request('token'))) {
+            error("Invalid Token");
+        }
+
+        if (! User::verified($user->email)) {
+            error("Update verified user failed");
+        }
+        
+        redirect("/PHP-Auth/home");
         // verify token
         // update user
         // redirect home
     }
     
+    public function sendForgotLink()
+    {
+        // Mail password reset link
+    }
     public function validate($params)
     {
         if (! isset($params['username'],$params['email'],

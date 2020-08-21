@@ -36,5 +36,15 @@ $router->get('PHP-Auth/auth/password/forgot', function () {
 $router->post('PHP-Auth/auth/password/email', 'AuthsController@sendForgotLink');
 
 // RESET
-$router->get('PHP-Auth/auth/password/reset/{token}', 'AuthsController@showResetForm');
+$router->get('PHP-Auth/auth/password/reset/{token}', function ($token) {
+    return view('auth/reset');
+});
 $router->post('PHP-Auth/auth/password/reset', 'AuthsController@resetPassword');
+
+
+$router->get('PHP-Auth/truncate', function () {
+    $db = new \Core\Database\QueryBuilder(APP['database']);
+    $db->query("TRUNCATE TABLE users");
+    $db->query("TRUNCATE TABLE email_token");
+    redirect("/PHP-Auth/");
+});

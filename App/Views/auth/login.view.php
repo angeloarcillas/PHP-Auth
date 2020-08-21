@@ -42,7 +42,7 @@
             <div class="form-group row mb-0">
               <div class="col-md-8 offset-md-4">
                 <button type="submit" class="btn btn-primary">Login</button>
-                <a class="btn btn-link" href="#">Forgot Your Password?</a>
+                <a class="btn btn-link" href="/PHP-Auth/auth/password/forgot">Forgot Your Password?</a>
               </div>
             </div>
           </form>

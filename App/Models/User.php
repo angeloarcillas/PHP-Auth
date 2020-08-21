@@ -26,7 +26,7 @@ class User
         
         return $user;
     }
-    public function setLogggedIn($id)
+    public static function setLogggedIn($id)
     {
         $id = "Acct-{$id}";
         $db = new QueryBuilder(APP['database']);
@@ -34,23 +34,38 @@ class User
         return $db->query($sql, [$id]);
     }
     
-    public function setLoggedOut($id)
+    public static function setLoggedOut($id)
     {
         $db = new QueryBuilder(APP['database']);
         $id = "Acct-{$id}";
         $sql = "UPDATE users SET `logged_out` = NOW() WHERE `id` = ?";
         return $db->query($sql, [$id]);
     }
-
-    public function VerifyUser($email, $token)
+    public static function setEmailToken($email, $token)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT token FROM user_verify WHERE email = ?";
-        $DB_token = $db->querySelect($sql, [$email]);
-        if (hash_equals($DB_token, $token)) {
-            $sql = "UPDATE users SET status = ?";
-            $db->query($sql, ["verified"]);
+        $sql = "INSERT INTO email_token (`email`,`token`) VALUES (?,?)";
+        return $db->query($sql, [$email, $token]);
+    }
+    
+    public function findEmailToken($email)
+    {
+        $db = new QueryBuilder(APP['database']);
+        $sql = "SELECT * FROM email_token WHERE `email` = ?";
+        return $db->querySelect($sql, [$email]);
+    }
+
+    public function verified($email)
+    {
+        $db = new QueryBuilder(APP['database']);
+        $sql = "UPDATE users SET `verified_at` = NOW() WHERE `email` = ?";
+        
+        if (! $db->query($sql, [$email])) {
+            return false;
         }
+
+        $sql = "DELETE FROM email_token WHERE `email` = ?";
+        return $db->query($sql, [$email]);
     }
 
     public static function generateID()

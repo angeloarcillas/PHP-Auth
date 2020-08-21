@@ -45,9 +45,18 @@ if (! function_exists("error")) {
  * @return array
  */
 if (! function_exists("request")) {
-    function request()
+    function request($key = null)
     {
-        return \Core\Request::request();
+        $request = \Core\Request::request();
+        if (!$key) {
+            return $request;
+        }
+
+        if (array_key_exists($key, $request)) {
+            return $request[$key];
+        }
+        
+        error("Request key doesnt exist");
     }
 }
 
