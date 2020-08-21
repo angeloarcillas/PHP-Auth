@@ -8,13 +8,13 @@ $router->get('PHP-Auth/home', function () {
 
 // REGISTER
 $router->get('PHP-Auth/auth/register', function () {
-    return view("auth/login");
+    return view("auth/register");
 });
 $router->post('PHP-Auth/auth/register', 'AuthsController@register');
 
 // LOGIN
 $router->get('PHP-Auth/auth/login', function () {
-    return view("auth/register");
+    return view("auth/login");
 });
 
 $router->post('PHP-Auth/auth/login', 'AuthsController@login');

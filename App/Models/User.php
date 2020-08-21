@@ -18,7 +18,13 @@ class User
     {
         $db = new QueryBuilder(APP['database']);
         $sql = "SELECT * FROM users WHERE `username` = ? or `email` = ?";
-        return $user = $db->querySelect($sql, [$username, $username]);
+        
+        $user = $db->querySelect($sql, [$username, $username]);
+        
+        $hold = explode("-", $user->id);
+        $user->id = $hold[1];
+        
+        return $user;
     }
     public function setLogggedIn($id)
     {

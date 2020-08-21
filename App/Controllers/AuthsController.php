@@ -20,9 +20,10 @@ class AuthsController
             error("Insert user failed");
         }
         
-        // \Http\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
-        $_SESSION['auth']['name'] = $username;
-        return redirect("PHP-Auth/home");
+        // \Core\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
+        $user = User::find($request['username']);
+        $_SESSION['auth']['name'] = $$user->username;
+        return redirect("PHP-Auth/home", ["key" => $mail]);
     }
 
     public function login()
@@ -38,8 +39,6 @@ class AuthsController
             $_SESSION['error'] = "Username or email doesnt exists";
             return redirect("PHP-Auth/auth/login");
         }
-        $hold = explode("-", $user->id);
-        $user->id = $hold[1];
         
         if (! password_verify($request['password'], $user->password)) {
             $_SESSION['error'] = "Password is incorrect";

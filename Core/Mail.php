@@ -1,5 +1,5 @@
 <?php
-namespace Http;
+namespace Core;
 
 // Mail::to()->subject()->line()->send();
 // Mail::to()->subject()->view()->send();
@@ -30,11 +30,12 @@ class Mail
         return new static;
     }
 
-    public static function view($file)
-    {
-        static::$message = require "template/emails/{$file}.view.php";
-        return new static;
-    }
+    // !TODO: Make it work
+    // public static function view($file)
+    // {
+    //     static::$message = readfile("App/Views/templates/emails/{$file}.view.php");
+    //     return new static;
+    // }
 
     public static function headers($headers)
     {
@@ -49,9 +50,10 @@ class Mail
     
     public static function send()
     {
-        static::$to = implode(",", static::$to);
-        mail(static::$to, static::$subject, static::$message, static::$headers);
+        // static::$to = implode(",", static::$to);
+        // mail(static::$to, static::$subject, static::$message, static::$headers);
         
+        dd(static::$message);
         // success redirect
     }
 }
