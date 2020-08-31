@@ -5,7 +5,7 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Welcome, Hi <?php echo e($user->username) ?></div>
+          <div class="card-title">Welcome, Hi <?php echo e($user->name) ?></div>
         </div>
         <div class="card-body">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, doloremque odio nulla reiciendis eaque,

@@ -14,6 +14,8 @@ $router->get('PHP-Auth/auth/register', function () {
 $router->post('PHP-Auth/auth/register', 'AuthsController@register');
 
 // LOGIN
+$router->view('PHP-Auth/auth/login', 'PHP-Auth/login');
+
 $router->get('PHP-Auth/auth/login', function () {
     return view("auth/login");
 });

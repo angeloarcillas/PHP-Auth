@@ -1,6 +1,6 @@
 # PHP-Auth
 
-## Featured
+## Feature
 * Login
 * Logout
 * Register
@@ -22,7 +22,7 @@ POST /auth/login                    @login                     # log in user
 
 POST /auth/logout                   @logout                    # log out user
 
-GET /auth/email/verify                  @showSendVerifymForm       # show verify form
+GET /auth/email/verify              @showSendVerifymForm       # show verify form
 POST /auth/email/verify             @sendVerifyLink            # re-send verify to user
 
 GET /auth/password/reset            @showResetLinkForm         # show link request form

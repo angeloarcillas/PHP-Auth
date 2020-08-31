@@ -48,6 +48,17 @@ class Router
         $this->routes['POST'][$uri] = $controller;
     }
 
+    /**
+     * set View routes
+     *
+     * @param string $uri
+     * @param string $controller
+     */
+    private function view(string $uri, string $controller)
+    {
+        $this->routes['VIEW'][$uri] = $controller;
+    }
+
     // !USE REQUEST HEADERS
     // private function put(string $uri, string $controller)
     // {
@@ -75,8 +86,11 @@ class Router
             throw new Exception("Invalid request method");
         }
 
-
         if (array_key_exists($uri, $this->routes[$method])) {
+            if($this->routes[$method] === "VIEW") {
+                return view($this->routes[$method][$uri]);
+            }
+
             if (is_callable($this->routes[$method][$uri])) {
                 $this->routes[$method][$uri]();
                 exit;
@@ -95,7 +109,7 @@ class Router
             if (preg_match('/^' . str_replace('/', '\/', $pattern) . '$/', $uri, $match)) {
                 $value = array_splice($match, 1);
                 $this->params = array_combine($key, $value);
-                
+
                 if (is_callable($controller)) {
                     $controller($this->params);
                     exit;

@@ -8,7 +8,7 @@
 
         <div class="card-body">
           <form method="POST" action="/PHP-Auth/auth/register">
-
+            <?php echo csrf_field() ?>
             <div class="form-group row">
               <label class="col-md-4 col-form-label text-md-right">Username</label>
 
