@@ -82,11 +82,16 @@ class Router
      */
     public function direct(string $uri, string $method)
     {
+        $method = strtoupper($method);
         if (!$this->isValidMethod($method)) {
             throw new Exception("Invalid request method");
         }
 
+        if($this->routes[$method] === "VIEW") {
+        }
+
         if (array_key_exists($uri, $this->routes[$method])) {
+
             if (is_callable($this->routes[$method][$uri])) {
                 $this->routes[$method][$uri]();
                 exit;

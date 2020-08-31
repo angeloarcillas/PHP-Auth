@@ -108,8 +108,8 @@ class AuthsController
 
     public function resetPassword()
     {
-        if (! hash_equals($_SESSION['token'], request('token'))) {
-            redirect('PHP-Auth?invalid+token');
+        if (! hash_equals($_SESSION['_csrf'], request('_csrf'))) {
+            error("419 | invalid csrf");
         }
 
         $password = request('password');
