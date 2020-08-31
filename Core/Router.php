@@ -87,10 +87,6 @@ class Router
         }
 
         if (array_key_exists($uri, $this->routes[$method])) {
-            if($this->routes[$method] === "VIEW") {
-                return view($this->routes[$method][$uri]);
-            }
-
             if (is_callable($this->routes[$method][$uri])) {
                 $this->routes[$method][$uri]();
                 exit;
@@ -99,6 +95,10 @@ class Router
             return $this->callAction(
                 ...explode('@', $this->routes[$method][$uri])
             );
+        }
+
+        if (array_key_exists($uri, $this->routes['VIEW'])) {
+            return view($this->routes['VIEW'][$uri]);
         }
 
         foreach ($this->routes[$method] as $route => $controller) {

@@ -1,11 +1,12 @@
 <?php
 // !TODO: Implement password reset
-$router->get('PHP-Auth', function () {
-    return view("welcome");
-});
-$router->get('PHP-Auth/home', function () {
-    return view("home");
-});
+$router->view('PHP-Auth', 'welcome');
+
+// $router->get('PHP-Auth', function () {
+//     return view("auth/login");
+// });
+
+$router->view('PHP-Auth/home', 'home');
 
 // REGISTER
 $router->get('PHP-Auth/auth/register', function () {
