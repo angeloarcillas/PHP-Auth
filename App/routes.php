@@ -4,41 +4,30 @@ $router->view('PHP-Auth', 'welcome');
 $router->view('PHP-Auth/home', 'home');
 
 // REGISTER
-$router->view('PHP-Auth/auth/register', 'auth/register');
+$router->view('PHP-Auth/auth/register', 'auth/register'); // showRegisterForm
 $router->post('PHP-Auth/auth/register', 'AuthsController@register');
 
 // LOGIN
-$router->view('PHP-Auth/auth/login', 'PHP-Auth/login');
-
-$router->view('PHP-Auth/auth/login', 'auth/login');
-
+$router->view('PHP-Auth/auth/login', 'auth/login'); // showLoginForm
 $router->post('PHP-Auth/auth/login', 'AuthsController@login');
 
 // LOGOUT
 $router->post('PHP-Auth/auth/logout', 'AuthsController@logout');
 
 // EMAIL
-$router->view('PHP-Auth/auth/email/verify/link', 'auth/verify');
-$router->post('PHP-Auth/auth/email/verify/link', 'AuthsController@sendVerifyLink');
+$router->view('PHP-Auth/auth/email/confirm', 'auth/verify'); // showResendEmailComfirmForm
+$router->post('PHP-Auth/auth/email/confirm', 'AuthsController@sendConfirmLinkEmail');
 $router->get('PHP-Auth/auth/email/verify', 'AuthsController@verifyEmail');
 
 // FORGOT
-$router->view('PHP-Auth/auth/password/forgot', 'auth/forgot');
-$router->post('PHP-Auth/auth/password/email', 'AuthsController@sendForgotLink');
-
-// RESET
-$router->view('PHP-Auth/auth/password/reset/{email}', 'auth/reset');
-// pwd/res/em?email=example@mail.com&token=!%!#%!%!$
-
- // select where email == 1
- // $user->token hash_equals $token
- // update user pwd
-
- // if id
- // update user pwd
-
-// $router->get('PHP-Auth/auth/password/reset/email', );
+$router->view('PHP-Auth/auth/password/forgot', 'auth/forgot'); // showForgotPasswordForm
+$router->post('PHP-Auth/auth/password/email', 'AuthsController@sendResetLinkEmail');
+$router->get('PHP-Auth/auth/password/reset', 'AuthsController@showResetPasswordForm');
 $router->post('PHP-Auth/auth/password/reset', 'AuthsController@resetPassword');
+
+// RESET PASSWORD
+// show
+// update
 
 
 $router->get('PHP-Auth/truncate', function () {

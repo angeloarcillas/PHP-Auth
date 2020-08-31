@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use \App\Models\User;
 
+//! VERIFY CSRF TOKEN
 class AuthsController
 {
     public function register()
@@ -36,11 +37,6 @@ class AuthsController
     {
         $request = request();
 
-        // select username
-        // verify password
-        // update login
-        // set session
-        // success
         if (! $user = User::find($request['username'])) {
             $_SESSION['error'] = "Username or email doesnt exists";
             return redirect("PHP-Auth/auth/login");
@@ -100,38 +96,36 @@ class AuthsController
         // redirect home
     }
 
-    public function sendForgotLink()
+    public function sendResetLinkEmail()
     {
         // Mail password reset link
         dd("Success");
     }
+    public function showResetPasswordForm()
+    {
+        $email = request('email');
+        $token = request('token');
+
+        if (! isset($email, $token)) {
+            error("email & token is required");
+        }
+
+        return view('auth/reset', compact('email', 'token'));
+    }
 
     public function resetPassword()
     {
-        if (! hash_equals($_SESSION['_csrf'], request('_csrf'))) {
-            error("419 | invalid csrf");
+        dd("reset");
+
+        if (! $user = User::findEmailToken($email)) {
+            error("email mismatch");
+        }
+        if (! hash_equals($user->token, $token)) {
+            error("token mismatch");
         }
 
-        $password = request('password');
-        $confirmPassword = request('confirmPassword');
-        if (! isset($password, $confirmPassword)) {
-            error("password and confirm password is required");
-        }
-
-        if (strlen($password) < 8 || strlen($password) > 255) {
-            error("password too short");
-        }
-
-        if ($password !== $params['confirmPassword']) {
-            error("password and confirm password didnt match");
-        }
-
-        // !TODO: check old and new password if not matched
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        if (! User::updatePassword($password, $email)) {
-            error("update password failed");
-        }
-        redirect("PHP-Auth");
+        // UPDATE users SET `password` = ? WHERE `email` = ?;
+        // $db->query($sql, [$password, $email]);
     }
     public function validate($params)
     {

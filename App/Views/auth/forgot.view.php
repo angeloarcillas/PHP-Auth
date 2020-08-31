@@ -8,7 +8,7 @@
           <div class="card-title">Please Enter Your Email Address</div>
         </div>
         <div class="card-body">
-          <form action="/PHP-Auth/auth/email/verify/link" method="POST">
+          <form action="/PHP-Auth/auth/password/email" method="POST">
             <div class="form-group">
               <label>Email Address:</label>
               <input class="form-control" type="email" name="email">
