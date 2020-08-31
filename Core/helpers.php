@@ -50,8 +50,6 @@ if (! function_exists("request")) {
 
 /**
  * dump and die
- *
- * @return mixed
  */
 if (! function_exists("dd")) {
     function dd(...$params)
@@ -60,6 +58,29 @@ if (! function_exists("dd")) {
         exit;
     }
 }
+
+
+/**
+ * Return file from assets folder
+ */
+if (! function_exists("assets")) {
+    function assets($path)
+    {
+        return '/PHP-Auth/App/assets/'.e($path);
+    }
+}
+
+/**
+ * Encode string
+ */
+if (! function_exists("e")) {
+    function e($string)
+    {
+        return htmlspecialchars($string, ENT_QUOTES);
+    }
+}
+
+
 
 /**
  * Set csrf token
@@ -83,7 +104,7 @@ if (! function_exists('csrf_token')) {
 if (! function_exists('csrf_field')) {
     function csrf_field()
     {
-        return new HtmlString('<input type="hidden" name="_csrf" value="'. csrf_token() .'">');
+        return new Core\HtmlString('<input type="hidden" name="_csrf" value="'. csrf_token() .'">');
     }
 }
 
@@ -95,7 +116,7 @@ if (! function_exists('csrf_field')) {
 if (! function_exists('method_field')) {
     function method_field($method)
     {
-        return new HtmlString('<input type="hidden" name="_method" value="'. $method .'">');
+        return new Core\HtmlString('<input type="hidden" name="_method" value="'. $method .'">');
     }
 }
 
@@ -111,7 +132,9 @@ if (! function_exists('redirect')) {
             }
         }
 
-        header("location:{$to},TRUE,{$status}");
+        $to = trim($to, "/");
+
+        header("location:/{$to}", TRUE, $status);
         exit;
     }
 }
