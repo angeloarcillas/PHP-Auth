@@ -10,20 +10,20 @@ class User
     {
         $db = new QueryBuilder(APP['database']);
         $id = self::generateID();
-        $sql = "INSERT INTO users (`id`,`username`, `email`, `password`, `logged_in`, `created_at`) VALUES (?,?, ?, ?, NOW(), NOW())";
+        $sql = "INSERT INTO users (`id`,`name`, `email`, `password`, `logged_in`, `created_at`) VALUES (?,?, ?, ?, NOW(), NOW())";
         return $db->query($sql, [$id, $username, $email, $password]);
     }
 
     public static function find($username)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT * FROM users WHERE `username` = ? or `email` = ?";
-        
+        $sql = "SELECT * FROM users WHERE `name` = ? or `email` = ?";
+
         $user = $db->querySelect($sql, [$username, $username]);
-        
+
         $hold = explode("-", $user->id);
         $user->id = $hold[1];
-        
+
         return $user;
     }
     public static function setLogggedIn($id)
@@ -33,7 +33,7 @@ class User
         $sql = "UPDATE users SET `logged_in` = NOW() WHERE `id` = ?";
         return $db->query($sql, [$id]);
     }
-    
+
     public static function setLoggedOut($id)
     {
         $db = new QueryBuilder(APP['database']);
@@ -44,14 +44,14 @@ class User
     public static function setEmailToken($email, $token)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "INSERT INTO email_token (`email`,`token`) VALUES (?,?)";
+        $sql = "INSERT INTO email_user (`email`,`token`) VALUES (?,?)";
         return $db->query($sql, [$email, $token]);
     }
-    
+
     public function findEmailToken($email)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT * FROM email_token WHERE `email` = ?";
+        $sql = "SELECT * FROM email_user WHERE `email` = ?";
         return $db->querySelect($sql, [$email]);
     }
 
@@ -59,12 +59,12 @@ class User
     {
         $db = new QueryBuilder(APP['database']);
         $sql = "UPDATE users SET `verified_at` = NOW() WHERE `email` = ?";
-        
+
         if (! $db->query($sql, [$email])) {
             return false;
         }
 
-        $sql = "DELETE FROM email_token WHERE `email` = ?";
+        $sql = "DELETE FROM email_user WHERE `email` = ?";
         return $db->query($sql, [$email]);
     }
 

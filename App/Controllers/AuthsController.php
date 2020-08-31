@@ -13,20 +13,20 @@ class AuthsController
         $email = request('email');
         $password = password_hash(request('password'), PASSWORD_DEFAULT);
 
-        
+
         if (! User::register($username, $email, $password)) {
             error("Insert user failed");
         }
-        
+
         $_SESSION['token'] = bin2hex(random_bytes(20));
         if (! User::setEmailToken($email, $_SESSION['token'])) {
             error("Set email and token to email_token table failed");
         }
-        
+
         // \Core\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
         $user = User::find($username);
         $_SESSION['auth']['id'] = $user->id;
-        $_SESSION['auth']['name'] = $user->username;
+        $_SESSION['auth']['name'] = $user->name;
         $_SESSION['auth']['email'] = $user->email;
 
         return view("home", compact('user'));
@@ -45,7 +45,7 @@ class AuthsController
             $_SESSION['error'] = "Username or email doesnt exists";
             return redirect("PHP-Auth/auth/login");
         }
-        
+
         if (! password_verify($request['password'], $user->password)) {
             $_SESSION['error'] = "Password is incorrect";
             return redirect("PHP-Auth/auth/login");
@@ -53,10 +53,10 @@ class AuthsController
         if (! User::setLogggedIn($user->id)) {
             error("Update logged_in failed");
         }
-        
+
         $_SESSION['auth']['id'] = $user->id;
         $_SESSION['auth']['name'] = $user->username;
-        
+
         return view("home", compact('user'));
     }
 
@@ -93,25 +93,25 @@ class AuthsController
         if (! User::verified($user->email)) {
             error("Update verified user failed");
         }
-        
+
         redirect("/PHP-Auth/home");
         // verify token
         // update user
         // redirect home
     }
-    
+
     public function sendForgotLink()
     {
         // Mail password reset link
         dd("Success");
     }
-    
+
     public function resetPassword()
     {
         if (! hash_equals($_SESSION['token'], request('token'))) {
             redirect('PHP-Auth?invalid+token');
         }
-        
+
         $password = request('password');
         $confirmPassword = request('confirmPassword');
         if (! isset($password, $confirmPassword)) {
@@ -125,7 +125,7 @@ class AuthsController
         if ($password !== $params['confirmPassword']) {
             error("password and confirm password didnt match");
         }
-        
+
         // !TODO: check old and new password if not matched
         $password = password_hash($password, PASSWORD_DEFAULT);
         if (! User::updatePassword($password, $email)) {
@@ -139,13 +139,13 @@ class AuthsController
             $params['password'],$params['confirmPassword'])) {
             error("username, email, password and confirm password is required");
         }
-    
+
         $username = $params['username'];
 
         if (strlen($username) < 5 || strlen($username) > 55) {
             error("invalid username length");
         }
-        
+
         if (! preg_match("/^[a-zA-Z0-9 ]*$/", $username)) {
             error("invalid username");
         }
@@ -160,9 +160,9 @@ class AuthsController
             || ! preg_match('/^[a-zA-Z0-9@.]*$/', $email)) {
             error("invalid email");
         }
-    
+
         $password = $params['password'];
-        
+
         if (strlen($password) < 8 || strlen($password) > 255) {
             error("password too short");
         }
