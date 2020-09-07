@@ -118,7 +118,7 @@ class AuthsController
         dd("reset");
 
         if (! $user = User::findEmailToken($email)) {
-            error("email mismatch");
+            error("email doesnt exist");
         }
         if (! hash_equals($user->token, $token)) {
             error("token mismatch");
@@ -126,6 +126,7 @@ class AuthsController
 
         // UPDATE users SET `password` = ? WHERE `email` = ?;
         // $db->query($sql, [$password, $email]);
+        // success
     }
     public function validate($params)
     {

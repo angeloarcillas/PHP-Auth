@@ -1,0 +1,64 @@
+.container {
+  width: 100%;
+}
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+.shadow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.rounded {
+  border-radius: 4px;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.disabled {
+  opacity: 0.25;
+    pointer-events: none;
+}
+
+.close {
+ position: absolute;
+ top: 0;
+ right: 0;
+ font-size: 2rem;
+ color: #fff;
+ transform: translate(-100%, 50%);
+ cursor: pointer;
+}
+
+.close:hover,
+.close:active {
+color: #00B0FF;
+}
+
+.none {
+  display: none !important;
+}

@@ -1,4 +1,4 @@
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php require_once "App/Views/includes/header.php"; ?>
 
 <div class="container">
   <div class="row justify-content-center">
@@ -17,4 +17,4 @@
   </div>
 </div>
 
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php require_once "App/Views/includes/footer.php"; ?>

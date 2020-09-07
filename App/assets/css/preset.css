@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Preset
+   ========================================================================== */
+
+/* CSS VARIABLES */
+:root {
+  --main-text-color: #111;
+}
+
+
+/* Set box sizing model */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+
+/* Remove spaces, border and other extra visuals */
+html,
+body {
+  height: 100%;
+  padding: none;
+  border: none;
+  margin: none;
+  outline: none;
+
+  vertical-align: baseline;
+}
+
+/* Preset body */
+
+body {
+  min-width: 100%;
+  max-width: 1824px;
+
+  font-family: 'Open Sans', sans-serif;
+
+  color: var(--main-text-color);
+  background: #fff;
+
+  overflow-x: hidden;
+}
+
+/* Remove animation & transition before page loads */
+
+body.is-preload *,
+body.is-preload *:before,
+body.is-preload *:after {
+  animation: none !important;
+  transition: none !important;
+}
