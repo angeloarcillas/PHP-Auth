@@ -38,10 +38,12 @@ class AuthController
     {
         $request = request();
 
-        if (! $user = User::find($request['username'])) {
-            $_SESSION['error'] = "Username or email doesnt exists";
+        if (! $user = User::find($request['email'])) {
+            $_SESSION['error'] = "Email doesnt exists";
             return redirect("PHP-Auth/auth/login");
         }
+
+        dd($user);
 
         if (! password_verify($request['password'], $user->password)) {
             $_SESSION['error'] = "Password is incorrect";
@@ -52,12 +54,11 @@ class AuthController
             error("Update logged_in failed");
         }
 
-        $_SESSION['auth']['username'] = $user->username;
         $_SESSION['auth']['name'] = $user->name;
         $_SESSION['auth']['email'] = $user->email;
 
 
-        return view("home", [ 'user'=> $user ]);
+        return view("home");
     }
 
     public function logout()

@@ -151,3 +151,9 @@ if (! function_exists('class_basename')) {
         return basename(str_replace('\\', '/', $class));
     }
 }
+
+
+function view_path($path)
+{
+    return require_once "App/Views/{$path}.php";
+}
