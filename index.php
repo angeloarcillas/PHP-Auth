@@ -3,8 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-use Core\Request;
-use Core\Router;
+use Core\{Request, Router};
 
 require 'autoload.php';
 require 'Core/helpers.php';
