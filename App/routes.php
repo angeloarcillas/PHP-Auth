@@ -5,25 +5,25 @@ $router->view('PHP-Auth/home', 'home');
 
 // REGISTER
 $router->view('PHP-Auth/auth/register', 'auth/register'); // showRegisterForm
-$router->post('PHP-Auth/auth/register', 'AuthsController@register');
+$router->post('PHP-Auth/auth/register', 'AuthController@register');
 
 // LOGIN
 $router->view('PHP-Auth/auth/login', 'auth/login'); // showLoginForm
-$router->post('PHP-Auth/auth/login', 'AuthsController@login');
+$router->post('PHP-Auth/auth/login', 'AuthController@login');
 
 // LOGOUT
-$router->post('PHP-Auth/auth/logout', 'AuthsController@logout');
+$router->post('PHP-Auth/auth/logout', 'AuthController@logout');
 
 // EMAIL
 $router->view('PHP-Auth/auth/email/confirm', 'auth/verify'); // showResendEmailComfirmForm
-$router->post('PHP-Auth/auth/email/confirm', 'AuthsController@sendConfirmLinkEmail');
-$router->get('PHP-Auth/auth/email/verify', 'AuthsController@verifyEmail');
+$router->post('PHP-Auth/auth/email/confirm', 'AuthController@sendConfirmLinkEmail');
+$router->get('PHP-Auth/auth/email/verify', 'AuthController@verifyEmail');
 
 // FORGOT
 $router->view('PHP-Auth/auth/password/forgot', 'auth/forgot'); // showForgotPasswordForm
-$router->post('PHP-Auth/auth/password/email', 'AuthsController@sendResetLinkEmail');
-$router->get('PHP-Auth/auth/password/reset', 'AuthsController@showResetPasswordForm');
-$router->post('PHP-Auth/auth/password/reset', 'AuthsController@resetPassword');
+$router->post('PHP-Auth/auth/password/email', 'AuthController@sendResetLinkEmail');
+$router->get('PHP-Auth/auth/password/reset', 'AuthController@showResetPasswordForm');
+$router->post('PHP-Auth/auth/password/reset', 'AuthController@resetPassword');
 
 // RESET PASSWORD
 // show

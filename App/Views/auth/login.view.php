@@ -1,55 +1,49 @@
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php view_path('includes/header') ?>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">Login</div>
+<div class="w-full max-w-xs mx-auto pt-6">
 
-        <div class="card-body">
-          <form method="POST" action="">
-
-            <div class="form-group row">
-              <label class="col-md-4 col-form-label text-md-right">Username</label>
-
-              <div class="col-md-6">
-                <input type="text" class="form-control is-invalid" name="username" required autofocus>
-
-                <span class="invalid-feedback" role="alert">
-                  <strong><?php echo !isset($_SESSION['error'])?: $_SESSION['error'] ?></strong>
-                </span>
-
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-4 col-form-label text-md-right">Password</label>
-
-              <div class="col-md-6">
-                <input type="password" class="form-control" name="password" required>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-md-6 offset-md-4">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="remember">
-                  <label class="form-check-label" for="remember">Remember Me</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group row mb-0">
-              <div class="col-md-8 offset-md-4">
-                <button type="submit" class="btn btn-primary">Login</button>
-                <a class="btn btn-link" href="/PHP-Auth/auth/password/forgot">Forgot Your Password?</a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="border-b mb-6">
+      <h2 class="text-gray-700 text-xl uppercase font-bold">Login</h2>
     </div>
+    <form name="login" action="/PHP-Auth/auth/login" method="POST" onsubmit="loginForm()">
+    <?php
+    if(isset($_SESSION['error'])) {
+      echo $_SESSION['error'];
+    }
+    ?>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">
+          Email
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-400"
+          type="text" placeholder="example@mail.com" name="email">
+        <p class="text-red-500 text-xs italic"></p>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2">
+          Password
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:border-blue-400"
+          type="password" placeholder="******************" name="password">
+        <p class="text-red-500 text-xs italic"></p>
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit">
+          Sign In
+        </button>
+        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+          Forgot Password?
+        </a>
+      </div>
+    </form>
   </div>
 </div>
 
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php view_path('includes/footer'); ?>

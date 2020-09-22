@@ -1,20 +1,9 @@
-<?php require_once "App/Views/includes/header.php"; ?>
+<?php view_path('includes/header') ?>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Welcome, Hi <?php echo e($user->name) ?></div>
-        </div>
-        <div class="card-body">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, doloremque odio nulla reiciendis eaque,
-          aperiam voluptatibus adipisci libero, natus dolorum nisi vitae unde assumenda. Adipisci dolorum corrupti
-          repudiandae eaque molestias.
-        </div>
-      </div>
+ <div class="w-2/3 mx-auto border border-gray-200 p-6 rounded shadow">
+     <div class="border-b mb-6">
+     <h2 class="text-4xl uppercase font-bold">Welcome</h2>
+     </div>
     </div>
-  </div>
-</div>
 
 <?php require_once "App/Views/includes/footer.php"; ?>

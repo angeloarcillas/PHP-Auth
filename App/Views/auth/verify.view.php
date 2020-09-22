@@ -1,4 +1,5 @@
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php view_path('includes/header') ?>
+
 
 <div class="container">
   <div class="row justify-content-center">

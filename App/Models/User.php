@@ -14,12 +14,16 @@ class User
         return $db->query($sql, [$id, $username, $email, $password]);
     }
 
-    public static function find($username)
+    public static function find($email)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT * FROM users WHERE `name` = ? or `email` = ?";
+        $sql = "SELECT * FROM users WHERE `email` = ?";
 
-        $user = $db->querySelect($sql, [$username, $username]);
+        $user = $db->querySelect($sql, [$email]);
+
+        if(!$user) {
+            return false;
+        }
 
         $hold = explode("-", $user->id);
         $user->id = $hold[1];

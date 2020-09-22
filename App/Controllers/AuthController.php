@@ -3,8 +3,7 @@ namespace App\Controllers;
 
 use \App\Models\User;
 
-//! VERIFY CSRF TOKEN
-class AuthsController
+class AuthController
 {
     public function register()
     {
@@ -19,46 +18,52 @@ class AuthsController
             error("Insert user failed");
         }
 
-        $_SESSION['token'] = bin2hex(random_bytes(20));
-        if (! User::setEmailToken($email, $_SESSION['token'])) {
+        if (! User::setEmailToken($email, csrf_token())) {
             error("Set email and token to email_token table failed");
         }
 
-        // \Core\Mail::to($email)->subject("Hello, {$username}")->view("register")->send();
-        $user = User::find($username);
-        $_SESSION['auth']['id'] = $user->id;
-        $_SESSION['auth']['name'] = $user->name;
-        $_SESSION['auth']['email'] = $user->email;
+        // \Core\Mail::to($email)
+        //  ->subject("Hello, {$username}")
+        //  ->view("register")
+        //  ->send();
 
-        return view("home", compact('user'));
+        $_SESSION['auth']['username'] = $username;
+        $_SESSION['auth']['name'] = $name;
+        $_SESSION['auth']['email'] = $email;
+
+        return view("home");
     }
 
     public function login()
     {
         $request = request();
 
-        if (! $user = User::find($request['username'])) {
-            $_SESSION['error'] = "Username or email doesnt exists";
+        if (! $user = User::find($request['email'])) {
+            $_SESSION['error'] = "Email doesnt exists";
             return redirect("PHP-Auth/auth/login");
         }
+
+        dd($user);
 
         if (! password_verify($request['password'], $user->password)) {
             $_SESSION['error'] = "Password is incorrect";
             return redirect("PHP-Auth/auth/login");
         }
+
         if (! User::setLogggedIn($user->id)) {
             error("Update logged_in failed");
         }
 
-        $_SESSION['auth']['id'] = $user->id;
-        $_SESSION['auth']['name'] = $user->username;
+        $_SESSION['auth']['name'] = $user->name;
+        $_SESSION['auth']['email'] = $user->email;
 
-        return view("home", compact('user'));
+
+        return view("home");
     }
 
     public function logout()
     {
-        if (! User::setLoggedOut($_SESSION['auth']['id'])) {
+        if (! User::setLoggedOut($_SESSION['auth']['username'])) {
             error("Update logged_out failed");
         }
 
@@ -76,9 +81,6 @@ class AuthsController
     }
     public function verifyEmail()
     {
-        // $token = Request::query("token");
-        // $email = Request::query("email");
-
         if (! $user = User::findEmailToken(request("email"))) {
             error("Email doesnt exists");
         }
@@ -162,7 +164,7 @@ class AuthsController
             error("password too short");
         }
 
-        if ($password !== $params['confirmPassword']) {
+        if ($password !== $params['password_confirmation']) {
             error("password and confirm password didnt match");
         }
     }

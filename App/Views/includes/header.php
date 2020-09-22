@@ -7,52 +7,68 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<<<<<<< HEAD
+=======
+  <script src="<?php echo assets('js/main.js')?>" defer></script>
+>>>>>>> 5200ec45ec4b18b8c7a39c8f4652efa977ebcc7b
 </head>
-<body>
-  <header>
-    <div class="navbar">
-      <h1>Foobar</h1>
+<body class="bg-gray-200">
+  <header class="md:flex items-center min-h-20 border p-6 bg-white">
+  <div class="mr-4 w-32">
+  <h1 class="text-2xl font-bold">PHP-Auth</h1>
+  </div>
+  <div class="text-sm md:flex justify-between w-full">
 
-      <div id="menu">
-        <svg viewBox="0 0 100 80" width="40" height="40">
-          <rect width="70" height="10"></rect>
-          <rect y="20" width="70" height="10"></rect>
-          <rect y="40" width="70" height="10"></rect>
-        </svg>
-      </div>
-    </div>
-
-    <div class="main--nav">
-      <span class="close">&times;</span>
-
+  <!-- MAIN NAV -->
       <nav>
-        <a href="/PHP-Auth/truncate">Truncate</a>
-        <a href="#">Users</a>
-        <a href="/PHP-Auth/auth/password/reset">Reset</a>
-        <a href="/PHP-Auth/auth/email/verify/link">Verify Email</a>
+        <a
+          class="block md:inline-block mr-2 hover:text-blue-500"
+          href="/PHP-Auth/truncate"
+        >Truncate</a>
+        <a
+          class="block md:inline-block mr-2 hover:text-blue-500"
+          href="#"
+        >Users</a>
+        <a
+          class="block md:inline-block mr-2 hover:text-blue-500"
+          href="/PHP-Auth/auth/password/reset"
+        >Reset</a>
+        <a
+          class="block md:inline-block mr-2 hover:text-blue-500"
+          href="/PHP-Auth/auth/email/verify/link"
+        >Verify Email</a>
       </nav>
+
     <div>
-      <?php if ( isset($_SESSION['auth']['name'])): ?>
-      <a href="/PHP-Auth/auth/login">Login</a>
-      <a href="/PHP-Auth/auth/register">Register</a>
+      <?php if (! isset($_SESSION['auth']['name'])): ?>
+      <a
+        class="block md:inline-block mr-2 hover:text-blue-500"
+        href="/PHP-Auth/auth/login"
+      >Login
+      </a>
+      <a
+        class="block md:inline-block hover:text-blue-500"
+        href="/PHP-Auth/auth/register"
+      >Register</a>
 
       <?php else: ?>
       <a
-      href="#" class="nav-link"
-      onclick="event.preventDefault();
-      document.querySelector('#logout-form').submit()"
+        class="hover:text-blue-500"
+        href="#"
+        onclick="event.preventDefault();
+        document.querySelector('#logout-form').submit()"
       >Logout</a>
 
       <form
-      id="logout-form"
-      class="none"
-      action="/PHP-Auth/auth/logout"
-      method="post">
+        id="logout-form"
+        class="none"
+        action="/PHP-Auth/auth/logout"
+        method="post">
       </form>
       <?php endif; ?>
-    </div>
+  </div>
   </div>
 </header>
 
 <main>
-  <div class="container mx-auto">
+  <div class="p-6 container mx-auto min-h-screen">
