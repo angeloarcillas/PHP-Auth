@@ -1,6 +1,6 @@
 <?php view_path('includes/header') ?>
 
-    <div class="w-2/3 mx-auto border border-gray-200 p-6 rounded shadow">
+    <div class="bg-white w-2/3 mx-auto border border-gray-200 p-6 rounded shadow">
      <div class="border-b mb-6">
      <h2 class="text-4xl uppercase font-bold">PHP Authentication</h2>
      </div>

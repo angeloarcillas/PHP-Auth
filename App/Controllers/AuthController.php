@@ -8,13 +8,12 @@ class AuthController
     public function register()
     {
         $this->validate(request());
-
-        $username = request('username');
+        $name = request('name');
         $email = request('email');
         $password = password_hash(request('password'), PASSWORD_DEFAULT);
 
 
-        if (! User::register($username, $email, $password)) {
+        if (! User::register($name, $email, $password)) {
             error("Insert user failed");
         }
 
@@ -27,7 +26,6 @@ class AuthController
         //  ->view("register")
         //  ->send();
 
-        $_SESSION['auth']['username'] = $username;
         $_SESSION['auth']['name'] = $name;
         $_SESSION['auth']['email'] = $email;
 
@@ -132,19 +130,9 @@ class AuthController
     }
     public function validate($params)
     {
-        if (! isset($params['username'],$params['email'],
-            $params['password'],$params['confirmPassword'])) {
-            error("username, email, password and confirm password is required");
-        }
-
-        $username = $params['username'];
-
-        if (strlen($username) < 5 || strlen($username) > 55) {
-            error("invalid username length");
-        }
-
-        if (! preg_match("/^[a-zA-Z0-9 ]*$/", $username)) {
-            error("invalid username");
+        if (! isset($params['email'],
+            $params['password'],$params['password_confirmation'])) {
+            error("email, password and confirm password is required");
         }
 
         $email = $params['email'];

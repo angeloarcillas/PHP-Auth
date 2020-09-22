@@ -6,12 +6,12 @@ use Core\Database\QueryBuilder;
 
 class User
 {
-    public static function register($username, $email, $password)
+    public static function register($name, $email, $password)
     {
         $db = new QueryBuilder(APP['database']);
         $id = self::generateID();
         $sql = "INSERT INTO users (`id`,`name`, `email`, `password`, `logged_in`, `created_at`) VALUES (?,?, ?, ?, NOW(), NOW())";
-        return $db->query($sql, [$id, $username, $email, $password]);
+        return $db->query($sql, [$id, $name, $email, $password]);
     }
 
     public static function find($email)

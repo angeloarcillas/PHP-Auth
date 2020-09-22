@@ -11,7 +11,7 @@ class Router
         'GET' => [],
         'POST' => []
     ];
-    private $params = null;
+    private $params = [];
 
     /**
      * instance router then set routes
@@ -32,7 +32,7 @@ class Router
      * @param string $uri
      * @param string $controller
      */
-    private function get(string $uri, $controller)
+    private function get(string $uri, string $controller)
     {
         $this->routes['GET'][$uri] = $controller;
     }
@@ -49,31 +49,6 @@ class Router
     }
 
     /**
-     * set View routes
-     *
-     * @param string $uri
-     * @param string $controller
-     */
-    private function view(string $uri, string $controller)
-    {
-        $this->routes['VIEW'][$uri] = $controller;
-    }
-
-    // !USE REQUEST HEADERS
-    // private function put(string $uri, string $controller)
-    // {
-    //     $this->routes['PUT'][$uri] = $controller;
-    // }
-    // private function patch(string $uri, string $controller)
-    // {
-    //     $this->routes['PATCH'][$uri] = $controller;
-    // }
-    // private function delete(string $uri, string $controller)
-    // {
-    //     $this->routes['DELETE'][$uri] = $controller;
-    // }
-
-    /**
      * process route
      *
      * @param string $uri
@@ -82,48 +57,51 @@ class Router
      */
     public function direct(string $uri, string $method)
     {
-        $method = strtoupper($method);
-        if (!$this->isValidMethod($method)) {
+        if (!$this->isValidMethod(strtoupper($method))) {
             throw new Exception("Invalid request method");
         }
 
-        if($this->routes[$method] === "VIEW") {
-        }
+        // Loop through routes
+        foreach ($this->routes[$method] as $route => $controller) {
+            // Check for wildcards
+            if (strpos($route, '{')) {
+                preg_match_all('/{(\w+)}/', $route, $matches);
 
-        if (array_key_exists($uri, $this->routes[$method])) {
+                // Set parameter keys
+                $key = array_pop($matches);
 
-            if (is_callable($this->routes[$method][$uri])) {
-                $this->routes[$method][$uri]();
+                // Set pattern for wildcards
+                $pattern = preg_replace('/{([\w]+)}/', '(\w+)', $route);
+
+                // Match route
+                if (preg_match('/^' . str_replace('/', '\/', $pattern) . '$/', $uri, $match)) {
+
+                    // Set parameter keys value
+                    $value = array_splice($match, 1);
+
+                    // Set parameters
+                    $this->params = array_combine($key, $value);
+                } else {
+                    // continue if route with wildcard and URI didnt match
+                    continue;
+                }
+            } else {
+                // continue if route w/out wildcard and URI didnt match
+                if ($uri !== $route) {
+                    continue;
+                }
+            }
+
+            // Call function if controller is callable
+            if (is_callable($controller)) {
+                $controller($this->params);
                 exit;
             }
 
+            // Call controller
             return $this->callAction(
-                ...explode('@', $this->routes[$method][$uri])
+                ...explode('@', $controller)
             );
-        }
-
-        if (array_key_exists($uri, $this->routes['VIEW'])) {
-            return view($this->routes['VIEW'][$uri]);
-        }
-
-        foreach ($this->routes[$method] as $route => $controller) {
-            preg_match_all('/{(\w+)}/', $route, $matches);
-            $key = array_pop($matches);
-            $pattern = preg_replace('/{([\w]+)}/', '(\w+)', $route);
-
-            if (preg_match('/^' . str_replace('/', '\/', $pattern) . '$/', $uri, $match)) {
-                $value = array_splice($match, 1);
-                $this->params = array_combine($key, $value);
-
-                if (is_callable($controller)) {
-                    $controller($this->params);
-                    exit;
-                }
-
-                return $this->callAction(
-                    ...explode('@', $controller)
-                );
-            }
         }
 
         throw new Exception("No routes defined for this url");
