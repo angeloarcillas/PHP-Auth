@@ -80,7 +80,7 @@ class Router
      * @param string $method
      * @return mixed
      */
-    public function direct(string $uri, string $method)
+    public function direct(s    )
     {
         $method = strtoupper($method);
         if (!$this->isValidMethod($method)) {
@@ -163,5 +163,13 @@ class Router
         }
 
         return $controller->$action($this->params);
+    }
+
+
+    public function resource($uri, $method)
+    {
+        foreach($this->routes as $route => $action) {
+            $this->routes[$method];
+        }
     }
 }

@@ -6,8 +6,7 @@
   <title>PHP-Auth</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?php echo assets('css/main.css')?>">
-  <script src="<?php echo assets('js/main.js') ?>" defer> </script>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
   <header>
