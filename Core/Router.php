@@ -55,7 +55,7 @@ class Router
      * @param string $method
      * @return mixed
      */
-    public function direct(string $uri, string $method)
+    public function direct(s    )
     {
         if (!$this->isValidMethod(strtoupper($method))) {
             throw new Exception("Invalid request method");
@@ -142,4 +142,16 @@ class Router
 
         return $controller->$action($this->params);
     }
+<<<<<<< HEAD
 }
+=======
+
+
+    public function resource($uri, $method)
+    {
+        foreach($this->routes as $route => $action) {
+            $this->routes[$method];
+        }
+    }
+}
+>>>>>>> 43bd7694f9947b130cfeda8b3867b16101dff10d
