@@ -126,15 +126,15 @@ if (! function_exists('method_field')) {
 if (! function_exists('redirect')) {
     function redirect($to = null, $status = 302, $headers = [])
     {
+        $host = "PHP-Auth"; // (OPTIONAL)
+
         if (count($headers) > 0) {
             foreach ($headers as $header) {
                 header($header);
             }
         }
 
-        $to = trim($to, "/");
-
-        header("location:/{$to}", TRUE, $status);
+        header("location:/{$host}{$to}", TRUE, $status);
         exit;
     }
 }

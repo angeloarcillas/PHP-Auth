@@ -7,10 +7,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-<<<<<<< HEAD
-=======
   <script src="<?php echo assets('js/main.js')?>" defer></script>
->>>>>>> 5200ec45ec4b18b8c7a39c8f4652efa977ebcc7b
 </head>
 <body class="bg-gray-200">
   <header class="md:flex items-center min-h-20 border p-6 bg-white">
@@ -48,7 +45,7 @@
       </a>
       <a
         class="block md:inline-block hover:text-blue-500"
-        href="/PHP-Auth/auth/register"
+        href="/PHP-Auth/register"
       >Register</a>
 
       <?php else: ?>
@@ -62,7 +59,7 @@
       <form
         id="logout-form"
         class="none"
-        action="/PHP-Auth/auth/logout"
+        action="/logout"
         method="post">
       </form>
       <?php endif; ?>

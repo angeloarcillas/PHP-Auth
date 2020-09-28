@@ -5,17 +5,29 @@ use Exception;
 
 class Request
 {
+    /**
+     * Get request url w/out ?(Get request)
+     */
     public static function uri(): string
     {
+        // strip extra slashes
         $uri = trim($_SERVER['REQUEST_URI'], '/');
+
+        // return url w/out  Get request
         return reset(...[explode('?', $uri)]);
     }
-    
+
+    /**
+     * Get request method
+     */
     public static function method(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
-    
+
+    /**
+     * Get request variables
+     */
     public static function request(): array
     {
         if (empty($_REQUEST)) {
@@ -27,7 +39,10 @@ class Request
         }, $_REQUEST);
     }
 
-    public static function query($key = false)
+    /**
+     * Get query string variables
+     */
+    public static function query(?string $key = null)
     {
         if (!$key) {
             return $_GET;

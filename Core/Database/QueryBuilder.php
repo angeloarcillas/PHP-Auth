@@ -52,13 +52,15 @@ class QueryBuilder extends Connection
         $params = (array) $params;
         $stmt->execute($params);
 
+        // TODO: dd()
         // return null or data
         if (! $data = $stmt->fetch()) {
             return null;
         }
+
         return $data;
     }
-    
+
     /**
      * Select all from database
      *
@@ -87,10 +89,10 @@ class QueryBuilder extends Connection
 
         $stmt = $this->conn->prepare($sql);
         $stmt->execute($params);
-        
+
         return $stmt->fetch();
     }
-    
+
     public function count($table): int
     {
         $stmt = $this->conn->prepare("SELECT * FROM $table");

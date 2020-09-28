@@ -5,13 +5,15 @@ use Exception;
 
 class Router
 {
+    private $host = "PHP-Auth"; // (OPTIONAL)
+
     private $controllerNamespace = "App\\Controllers\\";
     private $validMethods = ['GET','POST'];
     private $routes = [
         'GET' => [],
         'POST' => []
     ];
-    private $params = [];
+    private $params = null;
 
     /**
      * instance router then set routes
@@ -32,8 +34,9 @@ class Router
      * @param string $uri
      * @param string $controller
      */
-    private function get(string $uri, string $controller)
+    private function get(string $uri, $controller)
     {
+        $uri = trim($this->host.$uri ,'/');
         $this->routes['GET'][$uri] = $controller;
     }
 
@@ -43,8 +46,9 @@ class Router
      * @param string $uri
      * @param string $controller
      */
-    private function post(string $uri, string $controller)
+    private function post(string $uri, $controller)
     {
+        $uri = trim($this->host.$uri ,'/');
         $this->routes['POST'][$uri] = $controller;
     }
 
@@ -55,8 +59,9 @@ class Router
      * @param string $method
      * @return mixed
      */
-    public function direct(s    )
+    public function direct(string $uri, string $method)
     {
+        // Validate request method
         if (!$this->isValidMethod(strtoupper($method))) {
             throw new Exception("Invalid request method");
         }
@@ -82,10 +87,12 @@ class Router
                     // Set parameters
                     $this->params = array_combine($key, $value);
                 } else {
+
                     // continue if route with wildcard and URI didnt match
                     continue;
                 }
             } else {
+
                 // continue if route w/out wildcard and URI didnt match
                 if ($uri !== $route) {
                     continue;
@@ -115,7 +122,7 @@ class Router
      */
     private function isValidMethod(string $method): bool
     {
-        return in_array($method, $this->validMethods);
+        return in_array($method, $this->validMethods, true);
     }
 
     /**
@@ -128,30 +135,23 @@ class Router
      */
     private function callAction(string $controller, string $action)
     {
+        // Set class namspace
         $class = $this->controllerNamespace . $controller;
 
+        // Check if class exist
         if (!class_exists($class)) {
-            throw new Exception("No Class defined for this URI.");
+            throw new Exception("No Class defined for this Controller.");
         }
 
-        $controller = new $class;
+        // Create object
+        $object = new $class;
 
-        if (!method_exists($controller, $action)) {
-            throw new Exception("No Method defined for this URI.");
+        // Check if method exist
+        if (!method_exists($object, $action)) {
+            throw new Exception("No Method defined for this Class.");
         }
 
-        return $controller->$action($this->params);
-    }
-<<<<<<< HEAD
-}
-=======
-
-
-    public function resource($uri, $method)
-    {
-        foreach($this->routes as $route => $action) {
-            $this->routes[$method];
-        }
+        // Call action from object
+        return $object->$action($this->params);
     }
 }
->>>>>>> 43bd7694f9947b130cfeda8b3867b16101dff10d

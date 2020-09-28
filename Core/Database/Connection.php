@@ -4,6 +4,9 @@ namespace Core\Database;
 
 class Connection
 {
+    /**
+     * Establish connection to database
+     */
     protected static function make($config)
     {
         try {
