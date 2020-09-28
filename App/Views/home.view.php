@@ -5,7 +5,7 @@
      <h2 class="text-4xl uppercase font-bold">
      Welcome,
      <?php
-     echo $_SESSION['auth']['name'];
+   dd($user);
      ?>
      </h2>
      </div>

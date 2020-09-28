@@ -25,6 +25,7 @@ function loginForm() {
  */
 function registerForm() {
   event.preventDefault();
+
   let inputs = {
     email: document.forms["register"]["email"],
     password: document.forms["register"]["password"],
@@ -36,7 +37,10 @@ function registerForm() {
   validatePassword(inputs.password);
 
   if (inputs.password.value !== inputs.confirmPassword.value) {
-    setErrorFor(inputs.confirmPassword, "Password and Confirm password didnt match");
+    setErrorFor(
+      inputs.confirmPassword,
+      "Password and Confirm password didnt match"
+    );
     error = true;
   }
 

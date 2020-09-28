@@ -8,28 +8,28 @@ class AuthController
     public function register()
     {
         $this->validate(request());
+
         $name = request('name');
         $email = request('email');
         $password = password_hash(request('password'), PASSWORD_DEFAULT);
 
-
-        if (! User::register($name, $email, $password)) {
-            error("Insert user failed");
+        if (User::find($email)) {
+            error('email address already exist');
         }
 
-        if (! User::setEmailToken($email, csrf_token())) {
-            error("Set email and token to email_token table failed");
-        }
+        User::register($name, $email, $password);
 
         // \Core\Mail::to($email)
         //  ->subject("Hello, {$username}")
         //  ->view("register")
         //  ->send();
 
-        $_SESSION['auth']['name'] = $name;
-        $_SESSION['auth']['email'] = $email;
+        $_SESSION['auth']['name'] = request('name');
+        $_SESSION['auth']['email'] = request('email');
 
-        return view("home");
+        $user = User::find($email);
+
+        return view("home", compact('user'));
     }
 
     public function login()
@@ -69,7 +69,7 @@ class AuthController
         session_unset();
         session_destroy();
 
-        return redirect("PHP-Auth");
+        return redirect('/');
     }
 
     public function sendVerifyLink()
@@ -155,5 +155,7 @@ class AuthController
         if ($password !== $params['password_confirmation']) {
             error("password and confirm password didnt match");
         }
+
+        return ['email' => $email, 'password' => $password];
     }
 }

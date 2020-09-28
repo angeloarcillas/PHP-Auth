@@ -1,25 +1,20 @@
-<?php require_once "App/Views/layout/header.php"; ?>
+<?php view_path('includes/header') ?>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Please Enter Your Email Address</div>
-        </div>
-        <div class="card-body">
-          <form action="/PHP-Auth/auth/password/email" method="POST">
-            <div class="form-group">
-              <label>Email Address:</label>
-              <input class="form-control" type="email" name="email">
-            </div>
-            <div class="form-group text-center">
-              <button type="submit" class="btn btn-primary">Send password reset email</button></div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mb-6 border-b border-gray-400">
+  <h2
+    class="text-lg md:text-4xl text-gray-900 uppercase font-bold">
+    Forgot password
+  </h2>
 </div>
 
-<?php require_once "App/Views/layout/header.php"; ?>
+<div class="mb-6">
+  <form action="#">
+    <input
+    class="w-full py-2 px-4 text-gray-700 border rounded appearance-none focus:border-blue-100 focus:shadow-outline outline-none"
+    type="email" name="email"
+      placeholder="Enter your email address"
+      autofocus>
+    <button class="mt-4 py-2 px-4 text-white bg-blue-400 rounded hover:bg-blue-500">Request password reset</button>
+  </form>
+</div>
+<?php view_path('includes/footer') ?>

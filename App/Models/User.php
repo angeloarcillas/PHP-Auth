@@ -11,25 +11,19 @@ class User
         $db = new QueryBuilder(APP['database']);
         $id = self::generateID();
         $sql = "INSERT INTO users (`id`,`name`, `email`, `password`, `logged_in`, `created_at`) VALUES (?,?, ?, ?, NOW(), NOW())";
-        return $db->query($sql, [$id, $name, $email, $password]);
+        $db->query($sql, [$id, $name, $email, $password]);
+        self::setEmailToken($email, csrf_token());
+        return true;
     }
 
     public static function find($email)
     {
         $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT * FROM users WHERE `email` = ?";
+        $sql = "SELECT * FROM users WHERE `email` = ? LIMIT 1";
 
-        $user = $db->querySelect($sql, [$email]);
-
-        if(!$user) {
-            return false;
-        }
-
-        $hold = explode("-", $user->id);
-        $user->id = $hold[1];
-
-        return $user;
+        return $db->querySelect($sql, [$email]);
     }
+
     public static function setLogggedIn($id)
     {
         $id = "Acct-{$id}";
@@ -45,6 +39,7 @@ class User
         $sql = "UPDATE users SET `logged_out` = NOW() WHERE `id` = ?";
         return $db->query($sql, [$id]);
     }
+
     public static function setEmailToken($email, $token)
     {
         $db = new QueryBuilder(APP['database']);
@@ -59,7 +54,7 @@ class User
         return $db->querySelect($sql, [$email]);
     }
 
-    public function verified($email)
+    public function verify($email)
     {
         $db = new QueryBuilder(APP['database']);
         $sql = "UPDATE users SET `verified_at` = NOW() WHERE `email` = ?";
@@ -72,14 +67,10 @@ class User
         return $db->query($sql, [$email]);
     }
 
-    // public function updatePassword($password)
-    // {
-    //     $sql = "UPDATE users SET `password` = ? WHERE id"
-    // }
     public static function generateID()
     {
         $db = new QueryBuilder(APP['database']);
-        $user = $db->querySelect('SELECT id FROM users ORDER BY id DESC');
+        $user = $db->querySelect('SELECT id FROM users ORDER BY id DESC LIMIT 1');
         if (!$user) {
             return 'Acct-10000';
         }

@@ -1,5 +1,5 @@
 <?php
-
+// TODO: forgot/reset password ui
 $router->get('/', fn () => view('welcome'));
 $router->get('/home', fn () => view('home'));
 
@@ -42,6 +42,6 @@ $router->get('/token', function () {
 });
 
 
-$router->get('PHP-Auth/user/{username}/email/{email}', function ($a) {
-    var_dump($a);
+$router->get('/user/{username}/email/{email}', function ($a) {
+    dd($a);
 });

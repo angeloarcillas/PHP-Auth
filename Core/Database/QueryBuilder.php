@@ -52,13 +52,11 @@ class QueryBuilder extends Connection
         $params = (array) $params;
         $stmt->execute($params);
 
-        // TODO: dd()
-        // return null or data
-        if (! $data = $stmt->fetch()) {
+        if($stmt->rowCount() !== 1) {
             return null;
         }
 
-        return $data;
+        return $stmt->fetch();
     }
 
     /**
