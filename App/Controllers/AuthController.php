@@ -5,15 +5,29 @@ use \App\Models\User;
 
 class AuthController
 {
+/**
+ * register
+ * login
+ * logout
+ * verify email
+ * resend email link
+ * send forgot password email
+ * show forgot password reset form
+ * reset forgot password
+ */
+
+
     public function register()
     {
+        // VALIDATE CSRF
+
         $this->validate(request());
 
         $name = request('name');
         $email = request('email');
         $password = password_hash(request('password'), PASSWORD_DEFAULT);
 
-        if (User::find($email)) {
+        if ($user = User::find($email)) {
             error('email address already exist');
         }
 
@@ -27,40 +41,38 @@ class AuthController
         $_SESSION['auth']['name'] = request('name');
         $_SESSION['auth']['email'] = request('email');
 
-        $user = User::find($email);
-
         return view("home", compact('user'));
     }
 
     public function login()
     {
+        // VALIDATE CSRF
+
         $request = request();
 
         if (! $user = User::find($request['email'])) {
             $_SESSION['error'] = "Email doesnt exists";
-            return redirect("PHP-Auth/auth/login");
+            return redirect("/login");
         }
 
-        dd($user);
 
         if (! password_verify($request['password'], $user->password)) {
             $_SESSION['error'] = "Password is incorrect";
-            return redirect("PHP-Auth/auth/login");
+            return redirect("/login");
         }
 
-        if (! User::setLogggedIn($user->id)) {
-            error("Update logged_in failed");
-        }
+        User::setLogggedIn($user->id);
 
         $_SESSION['auth']['name'] = $user->name;
         $_SESSION['auth']['email'] = $user->email;
 
 
-        return view("home");
+        return view("home", compact('user'));
     }
 
     public function logout()
     {
+        // VALIDATE CSRF
         if (! User::setLoggedOut($_SESSION['auth']['username'])) {
             error("Update logged_out failed");
         }
@@ -72,16 +84,12 @@ class AuthController
         return redirect('/');
     }
 
-    public function sendVerifyLink()
-    {
-        // Mail email verification link
-        dd("success");
-    }
     public function verifyEmail()
     {
         if (! $user = User::findEmailToken(request("email"))) {
             error("Email doesnt exists");
         }
+
         if (! hash_equals($user->token, request('token'))) {
             error("Invalid Token");
         }
@@ -96,37 +104,62 @@ class AuthController
         // redirect home
     }
 
-    public function sendResetLinkEmail()
+    public function sendConfirmLinkEmail()
     {
+        // Set email_user token or get
+        // Mail email verification link
+        dd("success");
+    }
+
+
+    public function sendForgotPasswordEmail()
+    {
+        // Set email_password token
         // Mail password reset link
         dd("Success");
     }
-    public function showResetPasswordForm()
+
+    public function showForgotPasswordResetForm()
     {
         $email = request('email');
         $token = request('token');
 
         if (! isset($email, $token)) {
-            error("email & token is required");
+            error("419 Unauthorized");
         }
 
         return view('auth/reset', compact('email', 'token'));
     }
 
+    public function resetForgotPassword()
+    {
+        // VALIDATE CSRF
+
+        $email = request('email');
+        $user = User::findEmailPassword('$email');
+
+        $token = request('token');
+        if (! hash_equals($user->token, $token)) {
+           error('419 Unauthorized');
+        }
+
+        if( request('password') !== request('password_confirmation')) {
+            error('password and password confirmation didnt match');
+        }
+
+        User::resetPassword($email, $password);
+        redirect('/home');
+    }
+
     public function resetPassword()
     {
-        dd("reset");
+        // VALIDATE CSRF
+        // JS validate password and confirm password
+        // validate password and confirm password
+        // validate old password and database password
+        // hash and alter password
+        // redirect
 
-        if (! $user = User::findEmailToken($email)) {
-            error("email doesnt exist");
-        }
-        if (! hash_equals($user->token, $token)) {
-            error("token mismatch");
-        }
-
-        // UPDATE users SET `password` = ? WHERE `email` = ?;
-        // $db->query($sql, [$password, $email]);
-        // success
     }
     public function validate($params)
     {
@@ -155,7 +188,5 @@ class AuthController
         if ($password !== $params['password_confirmation']) {
             error("password and confirm password didnt match");
         }
-
-        return ['email' => $email, 'password' => $password];
     }
 }
