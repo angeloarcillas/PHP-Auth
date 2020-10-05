@@ -8,7 +8,9 @@
 </div>
 
 <div class="mb-6">
-  <form action="#">
+  <form action="/PHP-Auth/password/reset/<?php echo e($_SESSION['auth']['name']) ?>" method="POST">
+  <!-- CSRF -->
+
 
     <div class="mb-4">
       <label
@@ -27,7 +29,7 @@
       </label>
       <input
         class="w-full py-2 px-4 text-gray-700 border rounded appearance-none focus:border-blue-100 focus:shadow-outline outline-none"
-        type="password" name="old_password"
+        type="password" name="password"
         placeholder="*********" autofocus>
     </div>
 
@@ -38,7 +40,7 @@
       </label>
       <input
         class="w-full py-2 px-4 text-gray-700 border rounded appearance-none focus:border-blue-100 focus:shadow-outline outline-none"
-        type="password" name="old_password"
+        type="password" name="password_confirmation"
         placeholder="*********" autofocus>
     </div>
 

@@ -28,7 +28,9 @@ $router->post('/password/forgot/reset', 'AuthController@resetForgotPassword');
 
 // RESET PASSWORD
 $router->get('/password/reset', fn () => view('auth/reset'));
-$router->post('/password/reset', 'AuthController@resetPassword');
+
+// TODO: change name to username or fix router regex
+$router->post('/password/reset/{name}', 'AuthController@resetPassword');
 
 
 $router->get('/truncate', function () {

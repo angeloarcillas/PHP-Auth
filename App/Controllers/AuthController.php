@@ -98,7 +98,7 @@ class AuthController
             error("Update verified user failed");
         }
 
-        redirect("/PHP-Auth/home");
+        return redirect("/PHP-Auth/home");
         // verify token
         // update user
         // redirect home
@@ -151,16 +151,38 @@ class AuthController
         redirect('/home');
     }
 
-    public function resetPassword()
+    public function resetPassword($params)
     {
+        dd($params);
+        $password = request('password');
+        $password_confirmation = request('password_confirmation');
+
+        if ($password !== $password_confirmation) {
+            error('password and confirm password didnt match');
+        }
+
+        $user = User::find($email);
+
+        if(!password_verify($user->password, request('old_password'))) {
+            error('old password didnt match');
+        }
+
+        if(password_verify($user->password, $password)) {
+            error('cant use old password');
+        }
+
+        User::resetPassword($password);
+
+        return redirect();
+
         // VALIDATE CSRF
         // JS validate password and confirm password
         // validate password and confirm password
         // validate old password and database password
         // hash and alter password
         // redirect
-
     }
+
     public function validate($params)
     {
         if (! isset($params['email'],
