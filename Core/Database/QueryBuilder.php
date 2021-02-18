@@ -1,105 +1,199 @@
 <?php
+
 namespace Core\Database;
 
-class QueryBuilder extends Connection
+final class QueryBuilder extends Connection
 {
-    protected ?object $conn;
+
+    // set validate fetch type
+    public $validFetchType = ['fetch', 'fetchAll'];
 
     /**
-     * make database connection
-     */
-    public function __construct(array $config)
-    {
-        $this->conn = parent::make($config);
-    }
-
-    /**
-     * query from database
+     * Raw SQL query from database
      *
      * @param string $sql
      * @param array $params
+     * @return bool
      */
-    public function query(string $sql, array $params = []): bool
+    public function rawQuery(string $sql, array $params = []): bool
     {
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute($params);
+        return $this->query($sql, $params);
     }
 
     /**
-     * query fetch all from database
+     * Raw SQL select query from database
      *
      * @param string $sql
      * @param array $params
+     * @return bool
      */
-    public function querySelectAll(string $sql, array $params = []): ?object
+    public function rawSelect(string $sql, array $params = []): bool|object
     {
-        $stmt = $this->conn->prepare($sql);
-        $params = (array) $params;
-        $stmt->execute($params);
-
-        return $stmt->fetchAll();
+        return $this->query($sql, $params, 'fetch');
     }
 
     /**
-     * query for fetch 1 from database
+     * Raw SQL select all query from database
      *
      * @param string $sql
      * @param array $params
+     * @return bool
      */
-    public function querySelect(string $sql, array $params = []): ?object
+    public function rawSelectAll(string $sql, array $params = []): array
     {
-        $stmt = $this->conn->prepare($sql);
-        $params = (array) $params;
-        $stmt->execute($params);
+        return $this->query($sql, $params, 'fetchAll');
+    }
 
-        if($stmt->rowCount() !== 1) {
-            return null;
-        }
+    /**
+     * Raw SQL row count query from database
+     *
+     * @param string $sql
+     * @param array $params
+     * @return bool
+     */
+    public function rawCount(string $sql, array $params = []): array
+    {
+        return $this->query($sql, $params, 'fetchAll', true);
+    }
 
-        return $stmt->fetch();
+    /**
+     * Execute INSERT sql
+     */
+    public function insert(string $table, array $params)
+    {
+        // set columns of insert sql
+        $columns = implode(',', array_keys($params));
+
+        // set values of inset sql
+        $values = trim(str_repeat('?,', count($params)), ',');
+
+        $sql = sprintf(
+            'INSERT INTO %s (%s) VALUES (%s)',
+            $table,
+            $columns,
+            $values
+        );
+
+        return $this->query($sql, $params);
+    }
+
+    /**
+     * Execute UPDATE sql
+     */
+    public function update(string $table, array $key, array $params)
+    {
+        // columns
+        $keys = array_keys($params);
+
+        // set columns to update
+        $set = trim(implode('=?,', $keys) . '=?', ',');
+
+        $sql = sprintf(
+            'UPDATE %s SET %s WHERE %s = ?',
+            $table,
+            $set,
+            key($key) // get array key
+        );
+
+        // append key value
+        $params[] = current($key);
+
+        return $this->query($sql, $params);
+    }
+
+    /**
+     * Execute DELETE sql
+     */
+    public function delete(string $table, string $key, string|int $param)
+    {
+        $sql = sprintf(
+            'DELETE FROM %s WHERE %s = ?',
+            $table,
+            $key
+        );
+
+        return $this->query($sql, [$param]);
+    }
+
+    /**
+     * Select from database
+     *
+     * @param string $sql
+     * @param array $params
+     * @return bool|object
+     */
+    public function select(string $table, string $column, string|int $param)
+    {
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = ? LIMIT 1",
+            $table,
+            $column
+        );
+
+        return $this->query($sql, [$param], 'fetch');
     }
 
     /**
      * Select all from database
      *
-     * @param string $table
+     * @param string $sql
+     * @param array $params
+     * @return bool|object
      */
-    public function selectAll($table)
+    public function selectAll(string $table, array $columns = ['*']): array
     {
-        $stmt = $this->conn->prepare("SELECT * FROM ?");
-        $stmt->execute([$table]);
+        $sql = sprintf(
+            "SELECT %s FROM %s",
+            implode(',', $columns), // set columns to fetch
+            $table
+        );
 
-        return $stmt->fetchAll();
+        return $this->query($sql, fetchType: 'fetchAll');
     }
 
     /**
-     * select from database
-     *
-     * @param string $table
-     * @param array $params
+     * Execute query
      */
-    public function select($table, array $params = ['*'])
-    {
-        $sql = sprintf(
-            "SELECT %s FROM {$table}",
-            implode(",", $params)
-        );
+    private function query(
+        string $sql,
+        array $params = [],
+        ?string $fetchType = null,
+        bool $count = false
+    ) {
+        // prepare sql
+        $stmt = $this->connection()->prepare($sql);
 
-        $stmt = $this->conn->prepare($sql);
+        // get parameters
+        $params = array_values($params);
+
+        // if no fetch type then execute
+        if (!$fetchType) {
+            return $stmt->execute($params);
+        }
+
+        // if invalid fetch type, throw error
+        if (!in_array($fetchType, $this->validFetchType)) {
+            throw new \Exception("{$fetchType} is an invalid Fetch Type.");
+        }
+
+        // execute sql
         $stmt->execute($params);
 
-        return $stmt->fetch();
+        // fetch from database
+        $result = $stmt->{$fetchType}();
+
+        // if count, return numbe of row fetched
+        if ($count) {
+            return $result->rowCount();
+        }
+
+        // return fetched result
+        return $result;
     }
 
-    public function count($table): int
+    // Establish connection
+    private function connection()
     {
-        $stmt = $this->conn->prepare("SELECT * FROM $table");
-        $stmt->execute();
-        return $stmt->rowCount();
-    }
-
-    public function __destruct()
-    {
-        $this->conn = null;
+        return parent::connect(CONFIG['database']);
     }
 }
