@@ -1,79 +1,88 @@
 <?php
+
 namespace App\Controllers;
 
 use \App\Models\User;
 
 class AuthController
 {
-/**
- * register
- * login
- * logout
- * verify email
- * resend email link
- * send forgot password email
- * show forgot password reset form
- * reset forgot password
- */
+    /**
+     * register
+     * login
+     * logout
+     * verify email
+     * resend email link
+     * send forgot password email
+     * show forgot password reset form
+     * reset forgot password
+     */
 
 
     public function register()
     {
-        // VALIDATE CSRF
+        verifyCsrf(request('_csrf'));
 
-        $this->validate(request());
+        $request = request();
 
-        $name = request('name');
-        $email = request('email');
-        $password = password_hash(request('password'), PASSWORD_DEFAULT);
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirm', 'min:8', 'max:255']
+        ]);
 
-        if ($user = User::find($email)) {
-            error('email address already exist');
+
+        $user = new User();
+        if ($user->find($request->email, 'email')) {
+            session(['errors' => [
+                'email' => 'email address already exist'
+            ]]);
+            return redirect()->back();
         }
 
-        User::register($name, $email, $password);
+        $request->password = password_hash(
+            $request->password, PASSWORD_DEFAULT
+        );
 
-        // \Core\Mail::to($email)
-        //  ->subject("Hello, {$username}")
-        //  ->view("register")
-        //  ->send();
+        $new_user = $user->create($request->all());
 
-        $_SESSION['auth']['name'] = request('name');
-        $_SESSION['auth']['email'] = request('email');
+        session(['auth' => [
+            'name' => $new_user->name,
+            'email' => $new_user->email
+            ]]);
 
-        return view("home", compact('user'));
+        return view("home", compact('new_user'));
     }
 
     public function login()
     {
-        // VALIDATE CSRF
+        verifyCsrf();
 
         $request = request();
+        $user = new User();
+        $current_user = $user->find($request->email, 'email');
 
-        if (! $user = User::find($request['email'])) {
-            $_SESSION['error'] = "Email doesnt exists";
-            return redirect("/login");
+        if (!password_verify($request->password, $user->password)) {
+            session(['errors' =>
+                ['password' => "Password is incorrect"
+            ]]);
+
+            return redirect()->back();
         }
 
+        $sql = ''; // set logged_in
+        $current_user->rawQuery($sql, [$user->id]);
 
-        if (! password_verify($request['password'], $user->password)) {
-            $_SESSION['error'] = "Password is incorrect";
-            return redirect("/login");
-        }
+        session(['auth' => [
+            'name' => $current_user->name,
+            'email' => $current_user->email,
+        ]]);
 
-        User::setLogggedIn($user->id);
-
-        $_SESSION['auth']['name'] = $user->name;
-        $_SESSION['auth']['email'] = $user->email;
-
-
-        return view("home", compact('user'));
+        return view("home", compact('current_user'));
     }
 
     public function logout()
     {
         // VALIDATE CSRF
-        if (! User::setLoggedOut($_SESSION['auth']['username'])) {
+        if (!User::setLoggedOut($_SESSION['auth']['username'])) {
             error("Update logged_out failed");
         }
 
@@ -86,15 +95,15 @@ class AuthController
 
     public function verifyEmail()
     {
-        if (! $user = User::findEmailToken(request("email"))) {
+        if (!$user = User::findEmailToken(request("email"))) {
             error("Email doesnt exists");
         }
 
-        if (! hash_equals($user->token, request('token'))) {
+        if (!hash_equals($user->token, request('token'))) {
             error("Invalid Token");
         }
 
-        if (! User::verified($user->email)) {
+        if (!User::verified($user->email)) {
             error("Update verified user failed");
         }
 
@@ -124,7 +133,7 @@ class AuthController
         $email = request('email');
         $token = request('token');
 
-        if (! isset($email, $token)) {
+        if (!isset($email, $token)) {
             error("419 Unauthorized");
         }
 
@@ -139,11 +148,11 @@ class AuthController
         $user = User::findEmailPassword('$email');
 
         $token = request('token');
-        if (! hash_equals($user->token, $token)) {
-           error('419 Unauthorized');
+        if (!hash_equals($user->token, $token)) {
+            error('419 Unauthorized');
         }
 
-        if( request('password') !== request('password_confirmation')) {
+        if (request('password') !== request('password_confirmation')) {
             error('password and password confirmation didnt match');
         }
 
@@ -163,11 +172,11 @@ class AuthController
 
         $user = User::find($email);
 
-        if(!password_verify($user->password, request('old_password'))) {
+        if (!password_verify($user->password, request('old_password'))) {
             error('old password didnt match');
         }
 
-        if(password_verify($user->password, $password)) {
+        if (password_verify($user->password, $password)) {
             error('cant use old password');
         }
 
@@ -185,8 +194,11 @@ class AuthController
 
     public function validate($params)
     {
-        if (! isset($params['email'],
-            $params['password'],$params['password_confirmation'])) {
+        if (!isset(
+            $params['email'],
+            $params['password'],
+            $params['password_confirmation']
+        )) {
             error("email, password and confirm password is required");
         }
 
@@ -196,8 +208,10 @@ class AuthController
             error("invalid email length");
         }
 
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)
-            || ! preg_match('/^[a-zA-Z0-9@.]*$/', $email)) {
+        if (
+            !filter_var($email, FILTER_VALIDATE_EMAIL)
+            || !preg_match('/^[a-zA-Z0-9@.]*$/', $email)
+        ) {
             error("invalid email");
         }
 

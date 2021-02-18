@@ -74,7 +74,7 @@ final class QueryBuilder extends Connection
             $values
         );
 
-        return $this->query($sql, $params);
+        return $this->query($sql, $params, 'fetchAll');
     }
 
     /**

@@ -2,29 +2,15 @@
 
 namespace App\Models;
 
+use Core\Blueprint\Model;
 use Core\Database\QueryBuilder;
 
-class User
+class User extends Model
 {
-    public static function register($name, $email, $password)
-    {
-        $db = new QueryBuilder(APP['database']);
-        $id = self::generateID();
-        $sql = "INSERT INTO users (`id`,`name`, `email`, `password`, `logged_in`, `created_at`) VALUES (?,?, ?, ?, NOW(), NOW())";
-        $db->query($sql, [$id, $name, $email, $password]);
-        self::setEmailToken($email, csrf_token());
-        return true;
-    }
+    protected $table = 'users';
+    protected $fillable = ['name', 'email', 'password', 'logged_in'];
 
-    public static function find($email)
-    {
-        $db = new QueryBuilder(APP['database']);
-        $sql = "SELECT * FROM users WHERE `email` = ? LIMIT 1";
-
-        return $db->querySelect($sql, [$email]);
-    }
-
-    public static function setLogggedIn($id)
+    public  function setLogggedIn($id)
     {
         $id = "Acct-{$id}";
         $db = new QueryBuilder(APP['database']);
@@ -32,7 +18,7 @@ class User
         return $db->query($sql, [$id]);
     }
 
-    public static function setLoggedOut($id)
+    public  function setLoggedOut($id)
     {
         $db = new QueryBuilder(APP['database']);
         $id = "Acct-{$id}";
@@ -40,11 +26,10 @@ class User
         return $db->query($sql, [$id]);
     }
 
-    public static function setEmailToken($email, $token)
+    public function setEmailToken($email, $token)
     {
-        $db = new QueryBuilder(APP['database']);
         $sql = "INSERT INTO email_user (`email`,`token`) VALUES (?,?)";
-        return $db->query($sql, [$email, $token]);
+        return $this->rawQuery($sql, [$email, $token]);
     }
 
     public function findEmailToken($email)

@@ -34,7 +34,7 @@ $router->post('/password/reset/{name}', 'AuthController@resetPassword');
 
 
 $router->get('/truncate', function () {
-    $db = new \Core\Database\QueryBuilder(APP['database']);
+    $db = new \Core\Database\QueryBuilder(CONFIG['database']);
     $db->query('TRUNCATE TABLE users;TRUNCATE TABLE email_user');
     redirect('/');
 });

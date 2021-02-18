@@ -84,4 +84,14 @@ trait Validator
   {
     $_SESSION['errors'][$this->input] = $message;
   }
+
+  public function confirm($request)
+  {
+    $confirm = request("{$this->input}_confirmation");
+
+    if ($request !== $confirm) {
+      $this->error("{$this->input} and confirm {$this->input} didn't match");
+    }
+  }
+
 }

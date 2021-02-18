@@ -208,7 +208,7 @@ if (!function_exists("e")) {
 if (!function_exists("error")) {
     function error(string $msg)
     {
-        throw new \Exception($msg);
+        throw new \Exception(sprintf('%s', $msg));
     }
 }
 
@@ -280,13 +280,15 @@ if (!function_exists('render')) {
  */
 
 if (!function_exists('verifyCsrf')) {
-    function verifyCsrf(string $hash)
+    function verifyCsrf(?string $hash = null)
     {
         // check if csrf token exists
         if (!isset($_SESSION['csrf_token'])) return false;
 
         // check if csrf token exired
         $expired = $_SESSION['csrf_lifespan'] < time();
+
+        $hash = $hash ?? request('_csrf');
 
         // compare csrf token and csrf field
         $matched = hash_equals($_SESSION['csrf_token'],  $hash);
