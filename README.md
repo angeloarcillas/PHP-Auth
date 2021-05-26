@@ -1,3 +1,5 @@
+# !NOTE: wip, check https://github.com/zerexei/php-core for base updated version
+
 # PHP-Auth
 
 ## Feature
