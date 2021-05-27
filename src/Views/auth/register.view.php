@@ -22,8 +22,8 @@
           <a href="#">Users</a>
         </nav>
         <div class="flex gap-5">
-          <a href="#">Login</a>
-          <a href="#" class="text-blue-400">Register</a>
+          <a href="/php-auth/login">Login</a>
+          <a href="/php-auth/register" class="text-blue-400">Register</a>
         </div>
       </div>
     </header>
@@ -38,13 +38,13 @@
           </h2>
           <form action="/php-auth/register" method="POST">
             <div class="my-4 text-sm text-red-500">
-            <ul class="list-disc list-inside">
-              <?php if (isset($_SESSION['errors'])) : ?>
-                <?php foreach ($_SESSION['errors'] as $error) : ?>
-                  <li><?php echo $error ?></li>
-                <?php endforeach ?>
-              <?php endif ?>
-            </ul>
+              <ul class="list-disc list-inside">
+                <?php if (isset($_SESSION['errors'])) : ?>
+                  <?php foreach ($_SESSION['errors'] as $error) : ?>
+                    <li><?php echo $error ?></li>
+                  <?php endforeach ?>
+                <?php endif ?>
+              </ul>
             </div>
 
             <?php echo csrf_field() ?>
