@@ -8,7 +8,7 @@
     </p>
   </h2>
 
-  <form action="/php-auth/register" method="POST">
+  <form action="/php-auth/login" method="POST">
     <?php include_html('errors') ?>
 
     <?php echo csrf_field() ?>
