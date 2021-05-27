@@ -2,13 +2,14 @@
 
 namespace App\Controllers\Auth;
 
-use \Exception;
 use \App\Models\User;
 
 class RegisterController
 {
     public function register()
     {
+        verifyCsrf(request()->_csrf);
+        
         $attributes = request()->validate([
             'username' => ['min:3', 'max:55'],
             'email' => ['required', 'email'],

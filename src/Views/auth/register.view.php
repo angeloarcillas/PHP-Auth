@@ -46,6 +46,9 @@
               <?php endif ?>
             </ul>
             </div>
+
+            <?php echo csrf_field() ?>
+
             <div class="mb-6">
               <label for="username" class="block mb-1 text-sm font-bold text-gray-500">Username</label>
               <input type="text" name="username" placeholder="username..." id="username" class="w-full p-2 border rounded">
