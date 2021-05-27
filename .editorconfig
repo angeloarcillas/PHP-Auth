@@ -18,3 +18,6 @@ charset = utf-8
 [*.{php,json}]
 indent_style = space
 indent_size = 4
+
+[*.view.php]
+indent_size = 2
