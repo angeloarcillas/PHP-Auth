@@ -15,6 +15,6 @@ indent_size = 2
 charset = utf-8
 
 # 4 space indentation
-[*.php]
+[*.{php,json}]
 indent_style = space
 indent_size = 4

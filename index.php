@@ -4,8 +4,9 @@
 use \SimpleRouter\Router;
 use \SimpleRouter\Request;
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/helpers.php';
 
 // init router
-Router::load('routes.php') // set the routes file
+Router::load('src/routes.php') // set the routes file
     ->direct(Request::url(), Request::method());
