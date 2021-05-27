@@ -96,3 +96,12 @@ if (!function_exists('verifyCsrf')) {
         return true;
     }
 }
+
+
+
+if (!function_exists('include_html')) {
+    function include_html(string $filename)
+    {
+        return require_once "src/Views/includes/{$filename}.view.php";
+    }
+}
