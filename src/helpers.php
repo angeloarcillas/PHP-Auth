@@ -97,8 +97,6 @@ if (!function_exists('verifyCsrf')) {
     }
 }
 
-
-
 if (!function_exists('include_html')) {
     function include_html(string $filename)
     {
