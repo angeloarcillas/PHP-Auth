@@ -6,7 +6,7 @@ class PagesController
 {
     public function welcome()
     {
-        // TODO: setup database
+        // TODO: 
         return view('welcome');
     }    
 }

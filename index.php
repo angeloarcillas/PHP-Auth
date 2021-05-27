@@ -1,5 +1,11 @@
 <?php
 
+// check if session started
+if (session_status() === PHP_SESSION_NONE) {
+    // start a session
+    session_start();
+}
+
 // import SimpleRouter
 use \SimpleRouter\Router;
 use \SimpleRouter\Request;

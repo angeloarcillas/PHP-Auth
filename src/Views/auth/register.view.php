@@ -37,6 +37,15 @@
             </p>
           </h2>
           <form action="/php-auth/register" method="POST">
+            <div class="my-4 text-sm text-red-500">
+            <ul class="list-disc list-inside">
+              <?php if (isset($_SESSION['errors'])) : ?>
+                <?php foreach ($_SESSION['errors'] as $error) : ?>
+                  <li><?php echo $error ?></li>
+                <?php endforeach ?>
+              <?php endif ?>
+            </ul>
+            </div>
             <div class="mb-6">
               <label for="username" class="block mb-1 text-sm font-bold text-gray-500">Username</label>
               <input type="text" name="username" placeholder="username..." id="username" class="w-full p-2 border rounded">
