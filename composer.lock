@@ -1,0 +1,67 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "735a37dbc4eb3c74d5cc019fb249cd1a",
+    "packages": [
+        {
+            "name": "zerexei/simplerouter",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zerexei/php-router-request.git",
+                "reference": "71930d80a1480e1345717532ef42b484c6a41013"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zerexei/php-router-request/zipball/71930d80a1480e1345717532ef42b484c6a41013",
+                "reference": "71930d80a1480e1345717532ef42b484c6a41013",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SimpleRouter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Angelo Arcillas",
+                    "email": "angeloarcillas64@gmail.com",
+                    "homepage": "https://github.com/zerexei",
+                    "role": "Web Developer"
+                }
+            ],
+            "description": "Simple Router and Request for PHP ^8.0",
+            "homepage": "https://github.com/zerexei/php-router-request",
+            "keywords": [
+                "http",
+                "request",
+                "router"
+            ],
+            "support": {
+                "issues": "https://github.com/zerexei/php-router-request/issues",
+                "source": "https://github.com/zerexei/php-router-request/tree/v2.1.1"
+            },
+            "time": "2021-05-27T04:00:22+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
+}

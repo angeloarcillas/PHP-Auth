@@ -1,0 +1,5 @@
+{
+    "require": {
+        "zerexei/simplerouter": "^2.1"
+    }
+}
