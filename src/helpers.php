@@ -83,14 +83,16 @@ if (!function_exists('verifyCsrf')) {
         // compare csrf token and csrf field
         $matched = hash_equals($_SESSION['csrf_token'],  $hash);
 
-        if ($expired || !$matched) {
-            $_SESSION['errors'] = ['csrf' => 'csrf token didnt match.'];
-            return redirect()->back();
-        };
-
         // remove csrf sessions
         unset($_SESSION['csrf_token']);
         unset($_SESSION['csrf_lifespan']);
+
+        if ($expired || !$matched) {
+            $_SESSION['errors'] = ['csrf' => 'csrf token didnt match.'];
+
+            return redirect()->back();
+            // return false
+        };
 
         // csrf token and csrf field matched
         return true;

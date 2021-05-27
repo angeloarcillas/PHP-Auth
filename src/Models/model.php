@@ -168,6 +168,18 @@ abstract class Model extends QueryBuilder
         return $this->rawCount(sql: $sql);
     }
 
+    // ========C U S T O M============================================
+    public function fetch($sql, $params = [])
+    {
+        return $this->rawSelect($sql, $params);
+    }
+    
+    public function fetchAll($sql, $params = [])
+    {
+        return $this->rawSelectAll($sql, $params);
+    }
+    // ===============================================================
+
     /**
      * Filter $request with $this->fillable
      * Returns all request that can be filled
