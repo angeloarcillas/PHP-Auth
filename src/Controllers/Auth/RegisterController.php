@@ -2,6 +2,9 @@
 
 namespace App\Controllers\Auth;
 
+use \Exception;
+use \App\Models\User;
+
 class RegisterController
 {
     public function register()
@@ -12,6 +15,14 @@ class RegisterController
             'password' => ['min:8', 'max:255', 'confirm']
         ]);
 
-        die(var_dump($attributes));
+        $user = new User();
+        
+        $isCreated = $user->insert($attributes);
+
+        if (!$isCreated) {
+            return redirect('/php-auth/503');
+        }
+
+        return redirect('dashboard');
     }
 }

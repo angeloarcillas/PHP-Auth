@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "zerexei/simplerouter",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zerexei/php-router-request.git",
-                "reference": "71930d80a1480e1345717532ef42b484c6a41013"
+                "reference": "04d193bd101fa4cac8ab12317d327ddf5c56dd71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zerexei/php-router-request/zipball/71930d80a1480e1345717532ef42b484c6a41013",
-                "reference": "71930d80a1480e1345717532ef42b484c6a41013",
+                "url": "https://api.github.com/repos/zerexei/php-router-request/zipball/04d193bd101fa4cac8ab12317d327ddf5c56dd71",
+                "reference": "04d193bd101fa4cac8ab12317d327ddf5c56dd71",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zerexei/php-router-request/issues",
-                "source": "https://github.com/zerexei/php-router-request/tree/v2.1.1"
+                "source": "https://github.com/zerexei/php-router-request/tree/v2.1.2"
             },
-            "time": "2021-05-27T04:00:22+00:00"
+            "time": "2021-05-27T10:07:39+00:00"
         }
     ],
     "packages-dev": [],
